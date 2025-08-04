@@ -1,4 +1,4 @@
-# 🕵️ StealthList
+# 🥷 StealthList
 
 > **Secure, scalable waitlist management platform with comprehensive security and abuse prevention**
 

@@ -3,21 +3,37 @@ const fs = require('fs');
 const path = require('path');
 
 // Local database connection using POSTGRES_URL from .env.local (same as existing setup)
-const localPool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-});
+let localPool = null;
+if (process.env.POSTGRES_URL && process.env.POSTGRES_URL.trim() !== '') {
+  try {
+    localPool = new Pool({
+      connectionString: process.env.POSTGRES_URL,
+    });
+  } catch (error) {
+    console.warn('⚠️  Local database configuration error:', error.message);
+  }
+} else {
+  console.log('⚠️  No local database configuration found. Run "bun run setup" to configure your local database.');
+}
 
 // Function to load production database URL from .env.prod
 function loadProdDatabaseUrl() {
   try {
     const envProdPath = path.join(process.cwd(), '.env.prod');
+    
+    // Check if file exists before trying to read it
+    if (!fs.existsSync(envProdPath)) {
+      console.log('⚠️  No .env.prod file found. Production database will not be available.');
+      return null;
+    }
+    
     const envProdContent = fs.readFileSync(envProdPath, 'utf8');
     const postgresUrlMatch = envProdContent.match(/POSTGRES_URL="([^"]+)"/);
     if (postgresUrlMatch) {
       return postgresUrlMatch[1];
     }
   } catch (error) {
-    console.error('Error loading .env.prod:', error);
+    console.warn('⚠️  Error loading .env.prod:', error.message);
   }
   return null;
 }
@@ -56,9 +72,17 @@ export default async function handler(req, res) {
   const pool = env === 'local' ? localPool : prodPool;
 
   if (!pool) {
-    return res.status(500).json({
-      error: `Database configuration not found for ${env} environment`
-    });
+    if (env === 'local') {
+      return res.status(503).json({
+        error: 'Local database not configured',
+        message: 'Please run "bun run setup" to configure your local database.'
+      });
+    } else {
+      return res.status(503).json({
+        error: 'Production database not configured',
+        message: 'Please configure your .env.prod file with production database credentials.'
+      });
+    }
   }
 
   if (req.method === 'GET') {

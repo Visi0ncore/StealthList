@@ -1,4 +1,4 @@
-# 🕵️ StealthList
+# 🥷 StealthList
 
 > **Secure, scalable waitlist management platform with comprehensive security and abuse prevention**
 
@@ -73,18 +73,33 @@ CREATE TABLE waitlist_signups (
 
 ### 3. Configure Environment
 
-Create `.env.local` with your database credentials:
+Set up your local database configuration:
 
 ```bash
-POSTGRES_URL="postgresql://stealthlist_user:your_secure_password@localhost:5432/stealthlist_waitlist"
-POSTGRES_PRISMA_URL="postgresql://stealthlist_user:your_secure_password@localhost:5432/stealthlist_waitlist?pgbouncer=true&connect_timeout=15"
-POSTGRES_URL_NON_POOLING="postgresql://stealthlist_user:your_secure_password@localhost:5432/stealthlist_waitlist"
+# Option 1: Use the setup script (recommended)
+bun run setup
+
+# Option 2: Manual setup
+cp .env.example.local .env.local
+nano .env.local
+```
+
+**Example .env.local content:**
+```bash
+POSTGRES_URL="postgresql://your_username:your_password@localhost:5432/your_database"
+POSTGRES_PRISMA_URL="postgresql://your_username:your_password@localhost:5432/your_database?pgbouncer=true&connect_timeout=15"
+POSTGRES_URL_NON_POOLING="postgresql://your_username:your_password@localhost:5432/your_database"
 ```
 
 **Generate a secure password:**
 ```bash
 openssl rand -base64 32
 ```
+
+**Database Setup Tips:**
+- Create a PostgreSQL database for your waitlist
+- Use a dedicated user with appropriate permissions
+- Ensure the database is accessible from localhost:5432
 
 ### 4. Set Up Secure Database Access
 
@@ -114,6 +129,11 @@ bun run db:stats     # View total signup count
 bun run db:list      # List all signups
 bun run db:recent    # View recent signups (last 24h)
 bun run db:reset     # Reset database (delete all data)
+```
+
+### Testing
+```bash
+bun run test         # Run comprehensive test suite
 ```
 
 ### Production Scripts
@@ -171,6 +191,8 @@ stealthlist/
 │   ├── index.html          # Main landing page
 │   └── signups.html        # Signup dashboard
 ├── scripts/
+│   ├── setup.sh            # Interactive setup script
+│   ├── test-suite.sh       # Comprehensive test suite
 │   ├── waitlist-stats.sh   # Production statistics
 │   └── waitlist-recent.sh  # Recent signups
 ├── db-connect.sh           # Database connection
@@ -217,6 +239,35 @@ For production, use a managed PostgreSQL service:
 - **Supabase**: Open source alternative
 - **Neon**: Serverless PostgreSQL
 - **Railway**: Simple deployment
+
+## 🧪 Testing
+
+### Comprehensive Test Suite
+The project includes a comprehensive test suite that validates all functionality:
+
+```bash
+bun run test
+```
+
+**Test Coverage:**
+- ✅ **Page Loading**: Landing page and dashboard accessibility
+- ✅ **API Endpoints**: All endpoints with proper error handling
+- ✅ **First-Run Experience**: Setup state and user guidance
+- ✅ **UI Components**: Icons, buttons, and styling
+- ✅ **Error Handling**: Graceful degradation and user feedback
+- ✅ **HTTP Status Codes**: Proper response codes for different states
+- ✅ **Security Headers**: CORS and security header validation
+- ✅ **Database Integration**: Connection handling and error states
+- ✅ **Modal System**: Custom modals for setup and data management
+- ✅ **Setup Script**: Dynamic file creation and step numbering
+
+**Test Categories:**
+- **📄 Page Tests**: Verify pages load correctly
+- **📊 API Tests**: Validate all API endpoints
+- **🎨 UI Tests**: Check icons, styling, and interactions
+- **🛡️ Security Tests**: Verify headers and protection
+- **🔧 Setup Tests**: Ensure first-run experience works
+- **⚙️ Script Tests**: Validate setup script functionality
 
 ## 📈 Analytics & Monitoring
 

@@ -212,11 +212,10 @@
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" id="logoLink">
-                    <span class="text-2xl">🕵️</span>
+                    <span class="text-2xl">🥷</span>
                     <h1 class="text-xl font-bold tracking-tight text-foreground">StealthList</h1>
                 </div>
                 <nav class="hidden md:flex items-center gap-6">
-                    <a href="/#features" class="text-muted-foreground hover:text-foreground transition-colors">Features</a>
                     <a href="/signups.html" class="text-foreground font-medium">Dashboard</a>
                     <a href="https://x.com/StealthList" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -244,6 +243,12 @@
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Local Environment</h2>
                     <div class="flex gap-2">
+                        <button id="runSetupBtn" class="btn btn-primary inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>
+                            </svg>
+                            Run Setup
+                        </button>
                         <button id="refreshLocalBtn" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
                             <svg class="w-4 h-4 refresh-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -256,12 +261,11 @@
                             </svg>
                             Export
                         </button>
-                        <button id="nukeLocalBtn" class="btn btn-destructive inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                            </svg>
-                            Nuke Data
-                        </button>
+                                            <button id="nukeLocalBtn" class="btn btn-destructive inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </button>
                     </div>
                 </div>
                 <div id="localContent"></div>
@@ -337,9 +341,9 @@
                     </svg>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-red-400">⚠️ Danger Zone</h3>
+                    <h3 class="text-lg font-semibold text-red-400">Danger Zone</h3>
                     <p class="text-sm text-muted-foreground mt-1">
-                        This will permanently delete ALL signup data from the local environment. This action cannot be undone.
+                        This will permanently delete ALL local signup data and cannot be undone.
                     </p>
                 </div>
                 <div class="flex gap-2">
@@ -351,6 +355,150 @@
                     </button>
                     <button id="cancelNukeBtn" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3 flex-1">
                         Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Setup Instructions Modal -->
+    <div id="setupModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-blue-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-blue-400">Setup Required</h3>
+                    <p class="text-sm text-muted-foreground mt-1">
+                        Configure your local database to get started
+                    </p>
+                </div>
+                <div class="text-left space-y-3 bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_14.9%)] rounded-lg p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center">
+                            <span class="text-xs font-semibold text-blue-400">1</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Open your terminal in the project directory</p>
+                            <p class="text-xs text-muted-foreground mt-1">Navigate to the StealthList folder</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center">
+                            <span class="text-xs font-semibold text-blue-400">2</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Run the setup command</p>
+                            <code class="text-xs bg-[hsl(0_0%_12%)] px-2 py-1 rounded mt-1 inline-block font-mono">bun run setup</code>
+                            <p class="text-xs text-muted-foreground mt-1">This creates .env.local from the example file</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center">
+                            <span class="text-xs font-semibold text-blue-400">3</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Edit .env.local with your database credentials</p>
+                            <p class="text-xs text-muted-foreground mt-1">Add your PostgreSQL connection details</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center">
+                            <span class="text-xs font-semibold text-blue-400">4</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Set up your PostgreSQL database</p>
+                            <p class="text-xs text-muted-foreground mt-1">Create database and tables (see README.md)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center">
+                            <span class="text-xs font-semibold text-blue-400">5</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Return here and refresh the page</p>
+                            <p class="text-xs text-muted-foreground mt-1">Your data will appear once configured</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <button id="closeSetupModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-6">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuke Success Modal -->
+    <div id="nukeSuccessModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-green-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-green-400">Data Deleted Successfully</h3>
+                    <p class="text-sm text-muted-foreground mt-1">
+                        Successfully deleted <span id="nukeSuccessCount" class="font-semibold">0</span> signup records from local environment
+                    </p>
+                </div>
+                <div class="flex justify-center">
+                    <button id="closeNukeSuccessModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-6">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuke Error Modal -->
+    <div id="nukeErrorModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-red-400">Delete Failed</h3>
+                    <p class="text-sm text-muted-foreground mt-1">
+                        Failed to delete data: <span id="nukeErrorMessage" class="font-semibold">Unknown error</span>
+                    </p>
+                </div>
+                <div class="flex justify-center">
+                    <button id="closeNukeErrorModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-6">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Error Modal -->
+    <div id="exportErrorModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-red-400">Export Failed</h3>
+                    <p class="text-sm text-muted-foreground mt-1">
+                        <span id="exportErrorMessage" class="font-semibold">Export failed. Please try again.</span>
+                    </p>
+                </div>
+                <div class="flex justify-center">
+                    <button id="closeExportErrorModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-6">
+                        Got it
                     </button>
                 </div>
             </div>
@@ -376,25 +524,64 @@
         }
 
         function showError(element, message, env) {
-            element.innerHTML = `
-                <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-6 text-center">
-                    <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-500/20 rounded-full mb-4">
-                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-red-400 mb-2">Error Loading Data</h3>
-                    <p class="text-sm text-muted-foreground">${message}</p>
-                </div>
-            `;
+            // Check if this is a setup-related message (not a real error)
+            const isSetupMessage = message.includes('not configured') || message.includes('setup');
             
-            // Set error state and disable export button
+            if (isSetupMessage) {
+                // Show welcoming setup state instead of error
+                element.innerHTML = `
+                    <div class="bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_14.9%)] rounded-lg p-6 text-center">
+                        <div class="flex items-center justify-center w-12 h-12 mx-auto bg-[hsl(0_0%_12%)] rounded-full mb-4">
+                            ${env === 'local' ? `
+                                <svg class="w-6 h-6 text-[hsl(0_0%_63.9%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+                                </svg>
+                            ` : `
+                                <svg class="w-6 h-6 text-[hsl(0_0%_63.9%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                                </svg>
+                            `}
+                        </div>
+                        <h3 class="text-lg font-semibold text-[hsl(0_0%_98%)] mb-2">Setup Required</h3>
+                        <p class="text-sm text-muted-foreground mb-4">${message}</p>
+                        ${env === 'local' ? `
+                            <p class="text-xs text-muted-foreground">Click the Run Setup button to configure your local database</p>
+                        ` : `
+                            <p class="text-xs text-muted-foreground">Configure your .env.prod file for production access</p>
+                        `}
+                    </div>
+                `;
+            } else {
+                // Show actual error state for real errors
+                element.innerHTML = `
+                    <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-6 text-center">
+                        <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-500/20 rounded-full mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-red-400 mb-2">Error Loading Data</h3>
+                        <p class="text-sm text-muted-foreground">${message}</p>
+                    </div>
+                `;
+            }
+            
+            // Set error state and disable buttons
             if (env === 'local') {
                 localErrorState = true;
                 document.getElementById('exportLocalBtn').disabled = true;
+                // Also disable refresh and nuke buttons for local environment when in setup state
+                if (isSetupMessage) {
+                    document.getElementById('refreshLocalBtn').disabled = true;
+                    document.getElementById('nukeLocalBtn').disabled = true;
+                }
             } else if (env === 'prod') {
                 prodErrorState = true;
                 document.getElementById('exportProdBtn').disabled = true;
+                // Also disable refresh button for production environment when in setup state
+                if (isSetupMessage) {
+                    document.getElementById('refreshProdBtn').disabled = true;
+                }
             }
         }
 
@@ -451,13 +638,18 @@
         function renderEnvironmentData(element, data, env) {
             const { totalSignups, signups, stats } = data;
 
-            // Clear error state and enable export button
+            // Clear error state and enable/disable buttons based on data
             if (env === 'local') {
                 localErrorState = false;
-                document.getElementById('exportLocalBtn').disabled = false;
+                document.getElementById('refreshLocalBtn').disabled = false;
+                // Disable export and nuke if no data
+                document.getElementById('exportLocalBtn').disabled = totalSignups === 0;
+                document.getElementById('nukeLocalBtn').disabled = totalSignups === 0;
             } else if (env === 'prod') {
                 prodErrorState = false;
-                document.getElementById('exportProdBtn').disabled = false;
+                document.getElementById('refreshProdBtn').disabled = false;
+                // Disable export if no data
+                document.getElementById('exportProdBtn').disabled = totalSignups === 0;
             }
 
             element.innerHTML = `
@@ -508,7 +700,6 @@
                 <div class="bg-card border border-border rounded-lg overflow-hidden">
                     <div class="p-6 border-b border-border">
                         <h3 class="text-lg font-semibold">Recent Signups</h3>
-                        <p class="text-sm text-muted-foreground">Latest signups from the ${env} environment</p>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -538,7 +729,7 @@
         function showExportModal(env) {
             // Check if there's an error state for this environment
             if ((env === 'local' && localErrorState) || (env === 'prod' && prodErrorState)) {
-                alert('Cannot export data when there is an error loading data. Please refresh and try again.');
+                showExportErrorModal('Cannot export data when there is an error loading data. Please refresh and try again.');
                 return;
             }
             
@@ -572,13 +763,34 @@
                 window.URL.revokeObjectURL(url);
             } catch (error) {
                 console.error('Export error:', error);
-                alert('Export failed. Please try again.');
+                showExportErrorModal('Export failed. Please try again.');
             }
         }
 
         // Nuke functions
         function showNukeModal() {
             const modal = document.getElementById('nukeModal');
+            modal.classList.add('show');
+        }
+
+        function showNukeSuccessModal(deletedCount) {
+            const modal = document.getElementById('nukeSuccessModal');
+            const countElement = document.getElementById('nukeSuccessCount');
+            countElement.textContent = deletedCount;
+            modal.classList.add('show');
+        }
+
+        function showNukeErrorModal(error) {
+            const modal = document.getElementById('nukeErrorModal');
+            const errorElement = document.getElementById('nukeErrorMessage');
+            errorElement.textContent = error;
+            modal.classList.add('show');
+        }
+
+        function showExportErrorModal(error) {
+            const modal = document.getElementById('exportErrorModal');
+            const errorElement = document.getElementById('exportErrorMessage');
+            errorElement.textContent = error;
             modal.classList.add('show');
         }
 
@@ -591,15 +803,21 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    alert(`Successfully deleted ${data.deletedCount} signup records from local environment.`);
+                    showNukeSuccessModal(data.deletedCount);
                     loadLocalData(); // Refresh the data
                 } else {
-                    alert('Failed to delete data: ' + (data.error || 'Unknown error'));
+                    showNukeErrorModal(data.error || 'Unknown error');
                 }
             } catch (error) {
                 console.error('Nuke error:', error);
-                alert('Failed to delete data. Please try again.');
+                showNukeErrorModal('Failed to delete data. Please try again.');
             }
+        }
+
+        // Setup function
+        function runSetup() {
+            // Show the setup instructions modal
+            document.getElementById('setupModal').classList.add('show');
         }
 
         // Event listeners
@@ -607,6 +825,9 @@
             // Load initial data
             loadLocalData();
             loadProdData();
+
+            // Setup button
+            document.getElementById('runSetupBtn').addEventListener('click', runSetup);
 
             // Refresh buttons
             document.getElementById('refreshLocalBtn').addEventListener('click', loadLocalData);
@@ -643,6 +864,24 @@
                 document.getElementById('nukeModal').classList.remove('show');
             });
 
+            // Setup modal buttons
+            document.getElementById('closeSetupModal').addEventListener('click', () => {
+                document.getElementById('setupModal').classList.remove('show');
+            });
+
+            // Nuke success/error modal buttons
+            document.getElementById('closeNukeSuccessModal').addEventListener('click', () => {
+                document.getElementById('nukeSuccessModal').classList.remove('show');
+            });
+
+            document.getElementById('closeNukeErrorModal').addEventListener('click', () => {
+                document.getElementById('nukeErrorModal').classList.remove('show');
+            });
+
+            document.getElementById('closeExportErrorModal').addEventListener('click', () => {
+                document.getElementById('exportErrorModal').classList.remove('show');
+            });
+
             // Close modals when clicking outside
             document.getElementById('exportModal').addEventListener('click', (e) => {
                 if (e.target.id === 'exportModal') {
@@ -652,6 +891,30 @@
 
             document.getElementById('nukeModal').addEventListener('click', (e) => {
                 if (e.target.id === 'nukeModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            document.getElementById('setupModal').addEventListener('click', (e) => {
+                if (e.target.id === 'setupModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            document.getElementById('nukeSuccessModal').addEventListener('click', (e) => {
+                if (e.target.id === 'nukeSuccessModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            document.getElementById('nukeErrorModal').addEventListener('click', (e) => {
+                if (e.target.id === 'nukeErrorModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            document.getElementById('exportErrorModal').addEventListener('click', (e) => {
+                if (e.target.id === 'exportErrorModal') {
                     e.target.classList.remove('show');
                 }
             });

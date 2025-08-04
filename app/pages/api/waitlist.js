@@ -1,9 +1,21 @@
 const { Pool } = require('pg');
 const { validateAndRateLimit } = require('../../lib/security');
 
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-});
+// Check if database configuration exists
+const hasDatabaseConfig = process.env.POSTGRES_URL && process.env.POSTGRES_URL.trim() !== '';
+
+let pool = null;
+if (hasDatabaseConfig) {
+  try {
+    pool = new Pool({
+      connectionString: process.env.POSTGRES_URL,
+    });
+  } catch (error) {
+    console.warn('⚠️  Database configuration error:', error.message);
+  }
+} else {
+  console.log('⚠️  No database configuration found. Run "bun run setup" to configure your local database.');
+}
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -23,6 +35,14 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
+    // Check if database is configured
+    if (!pool) {
+      return res.status(503).json({ 
+        success: false, 
+        message: 'Database not configured. Please run "bun run setup" to configure your local database.' 
+      });
+    }
+
     try {
       // Apply security validation and rate limiting
       const validation = validateAndRateLimit(req, res);

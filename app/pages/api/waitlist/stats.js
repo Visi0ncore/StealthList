@@ -1,8 +1,20 @@
 const { Pool } = require('pg');
 
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-});
+// Check if database configuration exists
+const hasDatabaseConfig = process.env.POSTGRES_URL && process.env.POSTGRES_URL.trim() !== '';
+
+let pool = null;
+if (hasDatabaseConfig) {
+  try {
+    pool = new Pool({
+      connectionString: process.env.POSTGRES_URL,
+    });
+  } catch (error) {
+    console.warn('⚠️  Database configuration error:', error.message);
+  }
+} else {
+  console.log('⚠️  No database configuration found. Run "bun run setup" to configure your local database.');
+}
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -17,6 +29,15 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
+    // Check if database is configured
+    if (!pool) {
+      return res.status(200).json({
+        count: 0,
+        latestSignups: 0,
+        message: 'Database not configured. Run "bun run setup" to get started.'
+      });
+    }
+
     try {
       const client = await pool.connect();
       
