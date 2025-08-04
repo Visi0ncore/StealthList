@@ -243,11 +243,15 @@
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Local Environment</h2>
                     <div class="flex gap-2">
-                        <button id="runSetupBtn" class="btn btn-primary inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button id="localActionBtn" class="btn btn-primary inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
+                            <svg class="w-4 h-4 setup-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>
                             </svg>
-                            Run Setup
+                            <svg class="w-4 h-4 add-user-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            <span class="setup-text">Run Setup</span>
+                            <span class="add-user-text hidden">Add Users</span>
                         </button>
                         <button id="refreshLocalBtn" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
                             <svg class="w-4 h-4 refresh-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,7 +449,7 @@
                 <div>
                     <h3 class="text-lg font-semibold text-green-400">Data Deleted Successfully</h3>
                     <p class="text-sm text-muted-foreground mt-1">
-                        Successfully deleted <span id="nukeSuccessCount" class="font-semibold">0</span> signup records from local environment
+                        Successfully deleted <span id="nukeSuccessCount" class="font-semibold">0</span> signup records
                     </p>
                 </div>
                 <div class="flex justify-center">
@@ -498,6 +502,90 @@
                 </div>
                 <div class="flex justify-center">
                     <button id="closeExportErrorModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-6">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-green-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold">Add Mock Users</h3>
+                    <p class="text-sm text-muted-foreground mt-1">
+                        Add test users to your local database
+                    </p>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2">
+                        <label for="userCount" class="text-sm font-medium">Number of users:</label>
+                        <input type="number" id="userCount" min="1" max="100" value="5" class="w-20 px-2 py-1 text-sm border border-border rounded bg-background text-foreground">
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="addUsersBtn" class="btn btn-primary inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3 flex-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            Add Users
+                        </button>
+                        <button id="closeAddUserModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Success Modal -->
+    <div id="addUserSuccessModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-green-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-green-400">Users Added Successfully</h3>
+                    <p class="text-sm text-muted-foreground mt-1">
+                        <span id="addUserSuccessMessage" class="font-semibold">Mock users have been added to your database.</span>
+                    </p>
+                </div>
+                <div class="flex justify-center">
+                    <button id="closeAddUserSuccessModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-6">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Error Modal -->
+    <div id="addUserErrorModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-red-400">Failed to Add Users</h3>
+                    <p class="text-sm text-muted-foreground mt-1">
+                        <span id="addUserErrorMessage" class="font-semibold">Failed to add mock users. Please try again.</span>
+                    </p>
+                </div>
+                <div class="flex justify-center">
+                    <button id="closeAddUserErrorModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-6">
                         Got it
                     </button>
                 </div>
@@ -574,6 +662,8 @@
                 if (isSetupMessage) {
                     document.getElementById('refreshLocalBtn').disabled = true;
                     document.getElementById('nukeLocalBtn').disabled = true;
+                    // Update the action button to show Run Setup since environment is not configured
+                    updateLocalActionButton(false);
                 }
             } else if (env === 'prod') {
                 prodErrorState = true;
@@ -645,6 +735,8 @@
                 // Disable export and nuke if no data
                 document.getElementById('exportLocalBtn').disabled = totalSignups === 0;
                 document.getElementById('nukeLocalBtn').disabled = totalSignups === 0;
+                // Update the action button to show Add User since environment is configured
+                updateLocalActionButton(true);
             } else if (env === 'prod') {
                 prodErrorState = false;
                 document.getElementById('refreshProdBtn').disabled = false;
@@ -814,10 +906,94 @@
             }
         }
 
+        // Global state for button functionality
+        let localEnvironmentConfigured = false;
+
+        // Dynamic button state management
+        function updateLocalActionButton(isConfigured) {
+            localEnvironmentConfigured = isConfigured;
+            const button = document.getElementById('localActionBtn');
+            const setupIcon = button.querySelector('.setup-icon');
+            const addUserIcon = button.querySelector('.add-user-icon');
+            const setupText = button.querySelector('.setup-text');
+            const addUserText = button.querySelector('.add-user-text');
+            
+            if (isConfigured) {
+                // Show Add User button
+                setupIcon.classList.add('hidden');
+                addUserIcon.classList.remove('hidden');
+                setupText.classList.add('hidden');
+                addUserText.classList.remove('hidden');
+            } else {
+                // Show Run Setup button
+                setupIcon.classList.remove('hidden');
+                addUserIcon.classList.add('hidden');
+                setupText.classList.remove('hidden');
+                addUserText.classList.add('hidden');
+            }
+        }
+
+        // Unified button click handler
+        function handleLocalActionButtonClick() {
+            if (localEnvironmentConfigured) {
+                showAddUserModal();
+            } else {
+                runSetup();
+            }
+        }
+
         // Setup function
         function runSetup() {
             // Show the setup instructions modal
             document.getElementById('setupModal').classList.add('show');
+        }
+
+        // Add User functions
+        function showAddUserModal() {
+            document.getElementById('addUserModal').classList.add('show');
+        }
+
+        async function addMockUsers() {
+            const count = parseInt(document.getElementById('userCount').value);
+            
+            if (isNaN(count) || count < 1 || count > 100) {
+                showAddUserErrorModal('Please enter a valid number between 1 and 100');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/signups/add-mock', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ count })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAddUserSuccessModal(data.message);
+                    loadLocalData(); // Refresh the data
+                } else {
+                    showAddUserErrorModal(data.message || 'Failed to add users');
+                }
+            } catch (error) {
+                console.error('Error adding mock users:', error);
+                showAddUserErrorModal('Failed to add users. Please try again.');
+            }
+        }
+
+        function showAddUserSuccessModal(message) {
+            document.getElementById('addUserSuccessMessage').textContent = message;
+            document.getElementById('addUserModal').classList.remove('show');
+            document.getElementById('addUserSuccessModal').classList.add('show');
+        }
+
+        function showAddUserErrorModal(message) {
+            document.getElementById('addUserErrorMessage').textContent = message;
+            document.getElementById('addUserModal').classList.remove('show');
+            document.getElementById('addUserErrorModal').classList.add('show');
         }
 
         // Event listeners
@@ -826,8 +1002,11 @@
             loadLocalData();
             loadProdData();
 
-            // Setup button
-            document.getElementById('runSetupBtn').addEventListener('click', runSetup);
+            // Initialize local action button state (will be updated after data loads)
+            updateLocalActionButton(false); // Start with Run Setup state
+            
+            // Set up the unified button click handler
+            document.getElementById('localActionBtn').addEventListener('click', handleLocalActionButtonClick);
 
             // Refresh buttons
             document.getElementById('refreshLocalBtn').addEventListener('click', loadLocalData);
@@ -882,6 +1061,20 @@
                 document.getElementById('exportErrorModal').classList.remove('show');
             });
 
+            // Add User modal buttons
+            document.getElementById('addUsersBtn').addEventListener('click', addMockUsers);
+            document.getElementById('closeAddUserModal').addEventListener('click', () => {
+                document.getElementById('addUserModal').classList.remove('show');
+            });
+
+            document.getElementById('closeAddUserSuccessModal').addEventListener('click', () => {
+                document.getElementById('addUserSuccessModal').classList.remove('show');
+            });
+
+            document.getElementById('closeAddUserErrorModal').addEventListener('click', () => {
+                document.getElementById('addUserErrorModal').classList.remove('show');
+            });
+
             // Close modals when clicking outside
             document.getElementById('exportModal').addEventListener('click', (e) => {
                 if (e.target.id === 'exportModal') {
@@ -915,6 +1108,24 @@
 
             document.getElementById('exportErrorModal').addEventListener('click', (e) => {
                 if (e.target.id === 'exportErrorModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            document.getElementById('addUserModal').addEventListener('click', (e) => {
+                if (e.target.id === 'addUserModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            document.getElementById('addUserSuccessModal').addEventListener('click', (e) => {
+                if (e.target.id === 'addUserSuccessModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            document.getElementById('addUserErrorModal').addEventListener('click', (e) => {
+                if (e.target.id === 'addUserErrorModal') {
                     e.target.classList.remove('show');
                 }
             });

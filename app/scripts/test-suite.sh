@@ -150,11 +150,29 @@ test_page "Error Handling" "http://localhost:3000/signups.html" "hsl(0_0%_8%)" "
 # Test 13: Check for setup function
 echo -e "${YELLOW}⚙️ Testing setup function...${NC}"
 test_page "Setup Function" "http://localhost:3000/signups.html" "function runSetup" "Setup function present"
-test_page "Setup Function" "http://localhost:3000/signups.html" "runSetupBtn.*addEventListener" "Setup button event listener present"
+test_page "Setup Function" "http://localhost:3000/signups.html" "localActionBtn.*addEventListener" "Local action button event listener present"
 test_page "Setup Modal" "http://localhost:3000/signups.html" "setupModal.*modal-overlay" "Setup modal HTML present"
 test_page "Setup Modal" "http://localhost:3000/signups.html" "Edit .env.local with your database credentials" "Accurate setup instructions present"
 
-# Test 14: Check for proper HTTP status codes
+# Test 16: Check for Add User functionality
+echo -e "${YELLOW}👤 Testing Add User functionality...${NC}"
+test_page "Add User Modal" "http://localhost:3000/signups.html" "addUserModal.*modal-overlay" "Add User modal HTML present"
+test_page "Add User Modal" "http://localhost:3000/signups.html" "Add Mock Users" "Add User modal title present"
+test_page "Add User Modal" "http://localhost:3000/signups.html" "Number of users:" "Add User modal input present"
+test_page "Add User Modal" "http://localhost:3000/signups.html" "addUsersBtn" "Add Users button present"
+test_page "Add User Success Modal" "http://localhost:3000/signups.html" "addUserSuccessModal.*modal-overlay" "Add User success modal HTML present"
+test_page "Add User Error Modal" "http://localhost:3000/signups.html" "addUserErrorModal.*modal-overlay" "Add User error modal HTML present"
+
+# Test 17: Test Add User API
+echo -e "${YELLOW}👤 Testing Add User API...${NC}"
+response=$(curl -s -X POST "http://localhost:3000/api/signups/add-mock" -H "Content-Type: application/json" -d '{"count": 1}')
+if echo "$response" | grep -q '"success":true'; then
+    print_result "Add User API" "PASS" "Add User API successfully adds mock users"
+else
+    print_result "Add User API" "FAIL" "Add User API failed or returned unexpected response"
+fi
+
+# Test 18: Check for proper HTTP status codes
 echo -e "${YELLOW}📊 Testing HTTP status codes...${NC}"
 local_status=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/api/signups?env=local")
 if [ "$local_status" = "503" ]; then
