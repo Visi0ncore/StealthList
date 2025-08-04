@@ -269,6 +269,22 @@ bun run test
 - **🔧 Setup Tests**: Ensure first-run experience works
 - **⚙️ Script Tests**: Validate setup script functionality
 
+### Test Data Management
+
+**🧹 Cleanup Commands:**
+```bash
+# Reset local environment to clean state (SAFE - never touches production)
+bun run test:cleanup
+
+# Add sample data to local environment for testing
+bun run test:cleanup:sample
+```
+
+**🚨 Safety Features:**
+- **Production data is NEVER touched** - All cleanup operations are local-only
+- **Automatic cleanup** - Test suites clean up after themselves
+- **Consistent starting points** - Each test suite starts from a known state
+
 ## 📈 Analytics & Monitoring
 
 ### Built-in Analytics
