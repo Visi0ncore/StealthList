@@ -1,12 +1,9 @@
-# 🥷 StealthList
+# 🥷 StealthList Application
 
-> **Secure, scalable waitlist management platform with comprehensive security and abuse prevention**
+> ⚠️ **WORK IN PROGRESS** ⚠️  
+> This README.md is currently being updated and may contain incomplete information.
 
-A bulletproof Next.js website with PostgreSQL-backed waiting list functionality, featuring comprehensive security and abuse prevention. This component serves as the public-facing website for StealthList with secure user registration capabilities.
-
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue)
-![Security](https://img.shields.io/badge/Security-Multi--Layer-green)
+This directory contains the main StealthList application - a secure, production-ready waitlist management system built with Next.js and PostgreSQL.
 
 ## ✨ Features
 
@@ -76,24 +73,19 @@ CREATE TABLE waitlist_signups (
 Set up your local database configuration:
 
 ```bash
-# Option 1: Use the setup script (recommended)
 bun run setup
-
-# Option 2: Manual setup
-cp .env.example.local .env.local
-nano .env.local
-```
-
-**Example .env.local content:**
-```bash
-POSTGRES_URL="postgresql://your_username:your_password@localhost:5432/your_database"
-POSTGRES_PRISMA_URL="postgresql://your_username:your_password@localhost:5432/your_database?pgbouncer=true&connect_timeout=15"
-POSTGRES_URL_NON_POOLING="postgresql://your_username:your_password@localhost:5432/your_database"
 ```
 
 **Generate a secure password:**
 ```bash
 openssl rand -base64 32
+```
+
+**Update .env.local with your credentials:**
+```bash
+POSTGRES_URL="postgresql://your_username:your_password@localhost:5432/your_database"
+POSTGRES_PRISMA_URL="postgresql://your_username:your_password@localhost:5432/your_database?pgbouncer=true&connect_timeout=15"
+POSTGRES_URL_NON_POOLING="postgresql://your_username:your_password@localhost:5432/your_database"
 ```
 
 **Database Setup Tips:**
@@ -129,11 +121,6 @@ bun run db:stats     # View total signup count
 bun run db:list      # List all signups
 bun run db:recent    # View recent signups (last 24h)
 bun run db:reset     # Reset database (delete all data)
-```
-
-### Testing
-```bash
-bun run test         # Run comprehensive test suite
 ```
 
 ### Production Scripts
@@ -192,7 +179,6 @@ stealthlist/
 │   └── signups.html        # Signup dashboard
 ├── scripts/
 │   ├── setup.sh            # Interactive setup script
-│   ├── test-suite.sh       # Comprehensive test suite
 │   ├── waitlist-stats.sh   # Production statistics
 │   └── waitlist-recent.sh  # Recent signups
 ├── db-connect.sh           # Database connection
@@ -240,51 +226,6 @@ For production, use a managed PostgreSQL service:
 - **Neon**: Serverless PostgreSQL
 - **Railway**: Simple deployment
 
-## 🧪 Testing
-
-### Comprehensive Test Suite
-The project includes a comprehensive test suite that validates all functionality:
-
-```bash
-bun run test
-```
-
-**Test Coverage:**
-- ✅ **Page Loading**: Landing page and dashboard accessibility
-- ✅ **API Endpoints**: All endpoints with proper error handling
-- ✅ **First-Run Experience**: Setup state and user guidance
-- ✅ **UI Components**: Icons, buttons, and styling
-- ✅ **Error Handling**: Graceful degradation and user feedback
-- ✅ **HTTP Status Codes**: Proper response codes for different states
-- ✅ **Security Headers**: CORS and security header validation
-- ✅ **Database Integration**: Connection handling and error states
-- ✅ **Modal System**: Custom modals for setup and data management
-- ✅ **Setup Script**: Dynamic file creation and step numbering
-
-**Test Categories:**
-- **📄 Page Tests**: Verify pages load correctly
-- **📊 API Tests**: Validate all API endpoints
-- **🎨 UI Tests**: Check icons, styling, and interactions
-- **🛡️ Security Tests**: Verify headers and protection
-- **🔧 Setup Tests**: Ensure first-run experience works
-- **⚙️ Script Tests**: Validate setup script functionality
-
-### Test Data Management
-
-**🧹 Cleanup Commands:**
-```bash
-# Reset local environment to clean state (SAFE - never touches production)
-bun run test:cleanup
-
-# Add sample data to local environment for testing
-bun run test:cleanup:sample
-```
-
-**🚨 Safety Features:**
-- **Production data is NEVER touched** - All cleanup operations are local-only
-- **Automatic cleanup** - Test suites clean up after themselves
-- **Consistent starting points** - Each test suite starts from a known state
-
 ## 📈 Analytics & Monitoring
 
 ### Built-in Analytics
@@ -317,31 +258,9 @@ bun run test:cleanup:sample
 - **Log Monitoring**: Set up alerts for suspicious activity
 - **Backup Strategy**: Regular database backups
 
-## 🤝 Contributing
-
-1. **Fork** the repository
-2. **Create** a feature branch
-3. **Make** your changes
-4. **Test** thoroughly
-5. **Submit** a pull request
-
-### Development Guidelines
-- Follow existing code style
-- Add tests for new features
-- Update documentation
-- Ensure security best practices
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🆘 Support
 
 - **Documentation**: Check this README and inline comments
 - **Issues**: Report bugs and feature requests on GitHub
 - **Security**: Report security vulnerabilities privately
 - **Community**: Join discussions in GitHub Discussions
-
----
-
-**Built with ❤️ for secure waitlist management**
