@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const { configureCORS } = require('../../../lib/cors');
 
 // Check if database configuration exists
 const hasDatabaseConfig = process.env.POSTGRES_URL && process.env.POSTGRES_URL.trim() !== '';
@@ -17,10 +18,7 @@ if (hasDatabaseConfig) {
 }
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  configureCORS(req, res, '/api/waitlist/stats');
 
   // Handle preflight requests
   if (req.method === 'OPTIONS') {

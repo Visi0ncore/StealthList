@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const { configureCORS } = require('../../../lib/cors');
 
 // Local database connection using POSTGRES_URL from .env.local (same as existing setup)
 let localPool = null;
@@ -45,15 +46,7 @@ const prodPool = prodDatabaseUrl ? new Pool({
 }) : null;
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-  // Add security headers
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
+  configureCORS(req, res, '/api/signups/export');
 
   // Handle preflight requests
   if (req.method === 'OPTIONS') {

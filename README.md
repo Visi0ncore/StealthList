@@ -1,7 +1,6 @@
 # 🥷 StealthList
 
-StealthList is a bulletproof Next.js application that provides secure, production-ready waitlist management with PostgreSQL backend.  
-Built with security-first principles, it includes multi-layer protection against abuse, comprehensive monitoring, and enterprise-grade reliability.
+StealthList is a Next.js application that provides waitlist management with a PostgreSQL backend.
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue)

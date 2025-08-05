@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const { validateAndRateLimit } = require('../../lib/security');
+const { configureCORS } = require('../../lib/cors');
 
 // Check if database configuration exists
 const hasDatabaseConfig = process.env.POSTGRES_URL && process.env.POSTGRES_URL.trim() !== '';
@@ -18,15 +19,7 @@ if (hasDatabaseConfig) {
 }
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-  // Add security headers
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
+  configureCORS(req, res, '/api/waitlist');
 
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
