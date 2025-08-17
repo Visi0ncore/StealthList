@@ -7,20 +7,22 @@
     "pg": "^8.16.3",
     "zod": "^3.22.0"
   },
+  "devDependencies": {
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24"
+  },
   "private": true,
-  "scripts": {
-    "dev": "bun run next dev",
-    "build": "next build",
-    "start": "next start",
-    "setup": "./scripts/setup.sh",
-    "test": "./scripts/test-suite.sh",
-    "test:unconfigured": "./scripts/test-unconfigured.sh",
-    "test:cleanup": "./scripts/cleanup-test-data.sh reset",
-    "test:cleanup:sample": "./scripts/cleanup-test-data.sh sample",
-    "db:connect": "./scripts/db-connect.sh",
-    "db:stats": "./scripts/db-connect.sh \"SELECT COUNT(*) as total_signups FROM waitlist_signups;\"",
-    "db:list": "./scripts/db-connect.sh \"SELECT * FROM waitlist_signups ORDER BY created_at DESC;\"",
-    "db:recent": "./scripts/db-connect.sh \"SELECT * FROM waitlist_signups WHERE created_at >= NOW() - INTERVAL '24 hours' ORDER BY created_at DESC;\"",
-    "db:reset": "./scripts/db-reset.sh"
-  }
+      "scripts": {
+        "dev": "bun run next dev",
+        "build": "next build",
+        "start": "next start",
+        "setup": "./scripts/setup.sh",
+        "db:connect": "./scripts/db-connect.sh",
+        "db:stats": "./scripts/db-connect.sh \"SELECT COUNT(*) as total_signups FROM waitlist_signups;\"",
+        "db:list": "./scripts/db-connect.sh \"SELECT * FROM waitlist_signups ORDER BY created_at DESC;\"",
+        "db:recent": "./scripts/db-connect.sh \"SELECT * FROM waitlist_signups WHERE created_at >= NOW() - INTERVAL '24 hours' ORDER BY created_at DESC;\"",
+        "db:reset": "./scripts/db-reset.sh",
+        "destroy": "./scripts/destroy.sh"
+      }
 } 

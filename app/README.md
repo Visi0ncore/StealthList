@@ -1,109 +1,18 @@
 # 🥷 StealthList Application
 
-> ⚠️ **WORK IN PROGRESS** ⚠️  
-> This README.md is currently being updated and may contain incomplete information.
-
 This directory contains the main StealthList application - a secure, production-ready waitlist management system built with Next.js and PostgreSQL.
 
 ## ✨ Features
 
-- ✅ **Secure Waiting List**: PostgreSQL database with direct pg client
-- ✅ **Multi-Layer Security**: Rate limiting, IP blocking, and abuse prevention
-- ✅ **Email Validation**: Enhanced client and server-side validation
-- ✅ **Database Management**: Secure command-line tools with no password exposure
-- ✅ **Static HTML Frontend**: Fast, reliable UI with Tailwind CSS styling
-- ✅ **Real-time Statistics**: Live counter updates via API
-- ✅ **Production Ready**: Comprehensive error handling and monitoring
+- 📝 **Waitlist Management**: PostgreSQL database for email signups
+- 🛡️ **Security**: Rate limiting, input validation, and SQL injection protection
+- 📊 **Real-time Stats**: Live counter updates via API
+- 🎨 **Custom UI**: Professional interface with custom error handling
+- 🔧 **Easy Setup**: One-command automated installation and configuration
+- 📱 **Responsive Design**: Works perfectly on desktop and mobile
+- 🔄 **Modular Architecture**: Reusable components and clean separation of concerns
 
-## 🔒 Security Features
 
-🛡️ **Backend Protection:**
-- **Rate Limiting**: Max 5 signups per IP per hour
-- **Burst Protection**: Max 3 requests per minute per IP
-- **IP Blocking**: 1-hour automatic blocks for abusers
-- **Email Deduplication**: 24-hour cooldown per email address
-- **Input Sanitization**: Email cleaning and validation
-- **SQL Injection Protection**: Parameterized queries only
-- **Security Headers**: XSS, CSRF, and clickjacking protection
-
-🪖 **Frontend Protection:**
-- **5-second cooldown** between form submissions
-- **Enhanced email validation** (254 character limit, proper regex)
-- **User-friendly error messages** with visual feedback
-- **Network error handling** with retry guidance
-
-⛑️ **Monitoring & Logging:**
-- **Successful signups logged** with email and count
-- **Failed attempts logged** with IP addresses and timestamps
-- **Automatic cleanup** of old rate limit data
-- **Attack pattern detection** and blocking
-
-## 🚀 Quick Start
-
-### 1. Install Dependencies
-
-```bash
-bun install
-```
-
-### 2. Set Up Database
-
-**Local PostgreSQL Setup:**
-
-```bash
-# Install PostgreSQL locally
-# Create database and user with secure credentials
-psql -U postgres -c "CREATE DATABASE stealthlist_waitlist;"
-psql -U postgres -c "CREATE USER stealthlist_user WITH ENCRYPTED PASSWORD 'your_secure_password';"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE stealthlist_waitlist TO stealthlist_user;"
-```
-
-**Create the waitlist table:**
-
-```sql
-CREATE TABLE waitlist_signups (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### 3. Configure Environment
-
-Set up your local database configuration:
-
-```bash
-bun run setup
-```
-
-**Generate a secure password:**
-```bash
-openssl rand -base64 32
-```
-
-**Update .env.local with your credentials:**
-```bash
-POSTGRES_URL="postgresql://your_username:your_password@localhost:5432/your_database"
-POSTGRES_PRISMA_URL="postgresql://your_username:your_password@localhost:5432/your_database?pgbouncer=true&connect_timeout=15"
-POSTGRES_URL_NON_POOLING="postgresql://your_username:your_password@localhost:5432/your_database"
-```
-
-**Database Setup Tips:**
-- Create a PostgreSQL database for your waitlist
-- Use a dedicated user with appropriate permissions
-- Ensure the database is accessible from localhost:5432
-
-### 4. Set Up Secure Database Access
-
-The system automatically creates a secure `.pgpass` file for password-free database access.
-
-### 5. Start Development Server
-
-```bash
-bun run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000)
 
 ## 📊 Available Scripts
 
@@ -112,6 +21,12 @@ Visit [http://localhost:3000](http://localhost:3000)
 bun run dev          # Start development server
 bun run build        # Build for production
 bun run start        # Start production server
+```
+
+### Setup & Configuration
+```bash
+bun run setup        # Complete automated setup
+bun run destroy      # Completely destroy setup (for fresh start)
 ```
 
 ### Database Management
@@ -123,11 +38,11 @@ bun run db:recent    # View recent signups (last 24h)
 bun run db:reset     # Reset database (delete all data)
 ```
 
-### Production Scripts
+<!-- ### Production Scripts
 ```bash
-./scripts/waitlist-stats.sh    # View production statistics
-./scripts/waitlist-recent.sh   # View recent production signups
-```
+./scripts/waitlist-stats.sh    # View production statistics (requires .env.prod)
+./scripts/waitlist-recent.sh   # View recent production signups (requires .env.prod)
+``` -->
 
 ## 🌐 API Endpoints
 
@@ -140,127 +55,90 @@ bun run db:reset     # Reset database (delete all data)
 - `DELETE /api/signups?env=local` - Delete all local signups
 - `GET /api/signups/export?env=local|prod&format=csv|json` - Export signup data
 
-## 🛡️ Security Implementation
+## 🔒 Security Features
 
 ### Rate Limiting
-- **Per IP**: 5 signups per hour
-- **Burst Protection**: 3 requests per minute
-- **Email Cooldown**: 24-hour cooldown per email
-- **IP Blocking**: 1-hour automatic blocks for abuse
+- 5 signups per IP per hour
+- 3 requests per minute per IP
+- 24-hour cooldown per email address
 
 ### Input Validation
-- **Email Format**: RFC-compliant email validation
-- **Length Limits**: 254 character maximum
-- **Sanitization**: Email cleaning and normalization
-- **SQL Injection**: Parameterized queries only
+- Email format validation with custom error handling
+- 254 character maximum length
+- Parameterized queries to prevent SQL injection
+- Custom validation (no browser popups)
 
-### Monitoring
-- **Success Logging**: All successful signups logged
-- **Error Tracking**: Failed attempts with IP addresses
-- **Cleanup**: Automatic cleanup of old rate limit data
-- **Pattern Detection**: Attack pattern recognition
+### Monitoring & Protection
+- Logs successful signups with IP tracking
+- Tracks failed attempts with IP addresses
+- Automatic cleanup of old rate limit data
+- One-time warning system for cleaner logs
+- CORS configuration for secure cross-origin requests
+
+## 📚 Documentation
+
+For more detailed information, see:
+- **[Application Structure](../docs/application-structure.md)** - Architecture overview and page navigation
+- **[Local Environment](../docs/local-environment.md)** - Local development setup and management  
+- **[Production Deployment](../docs/prod-environment.md)** - Deploy to Vercel and other platforms
 
 ## 📁 Project Structure
 
 ```
-stealthlist/
-├── lib/
-│   └── security.js          # Security middleware and validation
-├── pages/
-│   └── api/
-│       ├── waitlist.js      # Waitlist signup endpoint
-│       ├── waitlist/
-│       │   └── stats.js     # Waitlist statistics
-│       ├── signups.js       # Signup management
-│       └── signups/
-│           └── export.js    # Data export functionality
-├── public/
-│   ├── index.html          # Main landing page
-│   └── signups.html        # Signup dashboard
-├── scripts/
-│   ├── setup.sh            # Interactive setup script
+app/
+├── components/              # Reusable React components
+│   ├── Layout.js           # Main layout with header
+│   ├── Button.js           # Reusable button component
+│   ├── Modal.js            # Modal dialog component
+│   ├── StatsCard.js        # Statistics display card
+│   ├── SignupsTable.js     # Signup data table
+│   └── EnvironmentSection.js # Complete environment dashboard
+├── lib/                    # Utility libraries
+│   ├── security.js         # Rate limiting and validation
+│   ├── cors.js             # CORS configuration
+│   └── warnings.js         # One-time warning system
+├── pages/                  # Next.js pages
+│   ├── index.js            # Main waitlist page (/)
+│   ├── dashboard.js        # Production dashboard (/dashboard)
+│   ├── local-dashboard.js  # Local dashboard (/local-dashboard)
+│   └── _app.js             # App wrapper
+├── scripts/                # Automation scripts
+│   ├── setup.sh            # Complete setup script
+│   ├── destroy.sh          # Environment cleanup
+│   ├── db-connect.sh       # Database connection
+│   ├── db-reset.sh         # Database reset
 │   ├── waitlist-stats.sh   # Production statistics
 │   └── waitlist-recent.sh  # Recent signups
-├── db-connect.sh           # Database connection
-├── db-reset.sh             # Database reset
-├── package.json            # Dependencies and scripts
-└── next.config.js          # Next.js configuration
+├── styles/                 # Global styles
+│   └── globals.css         # Tailwind + custom styles
+└── public/                 # Static assets
+    ├── index.html          # Original static page (reference)
+    └── signups.html        # Original dashboard (reference)
 ```
 
-## 🔧 Configuration
+<!-- ## 🚀 Deployment
 
-### Environment Variables
-
-**Required:**
-- `POSTGRES_URL` - PostgreSQL connection string
-
-**Optional:**
-- `POSTGRES_PRISMA_URL` - Prisma-compatible connection string
-- `POSTGRES_URL_NON_POOLING` - Non-pooling connection string
-
-### Database Schema
-
-```sql
-CREATE TABLE waitlist_signups (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-## 🚀 Deployment
-
-### Vercel Deployment
-
-1. **Connect Repository**: Link your GitHub repository to Vercel
-2. **Environment Variables**: Set `POSTGRES_URL` in Vercel dashboard
-3. **Build Command**: `bun run build`
-4. **Output Directory**: `.next`
-5. **Install Command**: `bun install`
-
-### Production Database
-
-For production, use a managed PostgreSQL service:
-- **Vercel Postgres**: Native integration
-- **Supabase**: Open source alternative
-- **Neon**: Serverless PostgreSQL
-- **Railway**: Simple deployment
+For detailed deployment instructions, see **[Production Deployment](../docs/prod-environment.md)**. -->
 
 ## 📈 Analytics & Monitoring
 
-### Built-in Analytics
-- **Real-time Counter**: Live signup count on landing page
-- **Dashboard**: Comprehensive signup management interface
-- **Export Capabilities**: CSV and JSON export options
-- **Environment Separation**: Local and production data isolation
+### Built-in Features
+- Real-time signup counter on landing page
+- Signup management dashboard with separate local/production views
+- CSV and JSON export options
+- Local and production data separation
 
-### Monitoring Features
-- **Success Tracking**: All successful signups logged
-- **Error Monitoring**: Failed attempts with detailed logging
-- **Rate Limit Tracking**: IP-based abuse prevention
-- **Performance Metrics**: Response time and throughput
+### Basic Monitoring
+- Logs successful signups
+- Tracks failed attempts with IP addresses
+- Monitors rate limit usage
+- One-time warning system for cleaner logs
 
-## 🔒 Security Best Practices
 
-### Implemented Protections
-- ✅ **Rate Limiting**: Prevents abuse and spam
-- ✅ **Input Validation**: Server-side email validation
-- ✅ **SQL Injection**: Parameterized queries
-- ✅ **XSS Protection**: Security headers and sanitization
-- ✅ **CSRF Protection**: Same-origin policy enforcement
-- ✅ **Clickjacking**: X-Frame-Options header
-- ✅ **Content Sniffing**: X-Content-Type-Options header
-
-### Recommended Additional Measures
-- **HTTPS Only**: Force HTTPS in production
-- **CORS Configuration**: Restrict cross-origin requests
-- **API Key Protection**: Add authentication for admin endpoints
-- **Log Monitoring**: Set up alerts for suspicious activity
-- **Backup Strategy**: Regular database backups
 
 ## 🆘 Support
 
 - **Documentation**: Check this README and inline comments
 - **Issues**: Report bugs and feature requests on GitHub
 - **Security**: Report security vulnerabilities privately
-- **Community**: Join discussions in GitHub Discussions
+- **Community**: [Contact me on X](https://x.com/stealthlist)

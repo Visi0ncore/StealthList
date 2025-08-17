@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Dashboard - StealthList</title>
+    <meta name="description" content="View and manage production waitlist signups for StealthList.">
+    <link rel="icon" type="image/jpeg" href="/logo.jpeg">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: 'hsl(0 0% 3.9%)',
+                        foreground: 'hsl(0 0% 98%)',
+                        card: 'hsl(0 0% 3.9%)',
+                        'card-foreground': 'hsl(0 0% 98%)',
+                        primary: 'hsl(0 0% 98%)',
+                        'primary-foreground': 'hsl(0 0% 9%)',
+                        secondary: 'hsl(0 0% 14.9%)',
+                        'secondary-foreground': 'hsl(0 0% 98%)',
+                        muted: 'hsl(0 0% 14.9%)',
+                        'muted-foreground': 'hsl(0 0% 63.9%)',
+                        accent: 'hsl(0 0% 14.9%)',
+                        'accent-foreground': 'hsl(0 0% 98%)',
+                        border: 'hsl(0 0% 14.9%)',
+                        input: 'hsl(0 0% 14.9%)',
+                        ring: 'hsl(0 0% 83.1%)',
+                        destructive: 'hsl(0 62.8% 30.6%)',
+                        'destructive-foreground': 'hsl(0 0% 98%)'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            border-color: hsl(0 0% 14.9%);
+        }
+        
+        body {
+            background-color: hsl(0 0% 3.9%);
+            color: hsl(0 0% 98%);
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        }
+        
+        .btn {
+            background-color: transparent;
+            color: hsl(0 0% 98%);
+            border: 1px solid hsl(0 0% 14.9%);
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background-color: hsl(0 0% 14.9%);
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary {
+            background-color: hsl(0 0% 98%);
+            color: hsl(0 0% 9%);
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .btn-primary:hover {
+            background-color: hsl(0 0% 90%);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: hsl(0 0% 98%);
+            border: 1px solid hsl(0 0% 14.9%);
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem;
+            font-weight: 500;
+        }
+        
+        .btn-outline:hover {
+            background-color: hsl(0 0% 14.9%);
+            transform: translateY(-1px);
+        }
+        
+        .btn-destructive {
+            background-color: hsl(0 62.8% 30.6%);
+            color: hsl(0 0% 98%);
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .btn-destructive:hover {
+            background-color: hsl(0 72.2% 50.6%);
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: default;
+            transform: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .slide-up {
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading-skeleton {
+            background: linear-gradient(90deg, hsl(0 0% 14.9%) 25%, hsl(0 0% 18%) 50%, hsl(0 0% 14.9%) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background-color: hsl(0 0% 3.9%);
+            border: 1px solid hsl(0 0% 14.9%);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background font-sans antialiased">
+    
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" id="logoLink">
+                    <span class="text-2xl">🥷</span>
+                    <h1 class="text-xl font-bold tracking-tight text-foreground">StealthList</h1>
+                </div>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="/dashboard.html" class="text-foreground font-medium">Production</a>
+                    <a href="/local-dashboard.html" class="text-muted-foreground hover:text-foreground transition-colors">Local</a>
+                    <a href="https://x.com/StealthList" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://github.com/Visi0ncore/StealthList" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12 pt-32">
+        <div class="fade-in">
+            <!-- Production Environment Section -->
+            <div id="prodSection">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Production Environment</h2>
+                    <div class="flex gap-2">
+                        <button id="refreshProdBtn" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
+                            <svg class="w-4 h-4 refresh-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Refresh
+                        </button>
+                        <button id="exportProdBtn" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Export
+                        </button>
+                    </div>
+                </div>
+                <div id="prodContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-blue-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold" id="exportModalTitle">Export Production Data</h3>
+                    <p class="text-sm text-muted-foreground mt-1" id="exportModalDescription">
+                        Choose the format for your export file
+                    </p>
+                </div>
+                <div class="flex gap-2">
+                    <button id="exportCsvBtn" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3 flex-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        CSV
+                    </button>
+                    <button id="exportJsonBtn" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3 flex-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                        JSON
+                    </button>
+                </div>
+                <button id="closeExportModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3 w-full">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Error Modal -->
+    <div id="exportErrorModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-500/20 rounded-full">
+                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-red-400">Export Failed</h3>
+                    <p class="text-sm text-muted-foreground mt-1">
+                        <span id="exportErrorMessage" class="font-semibold">Export failed. Please try again.</span>
+                    </p>
+                </div>
+                <div class="flex justify-center">
+                    <button id="closeExportErrorModal" class="btn btn-outline inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-6">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentExportFormat = null;
+        let prodErrorState = false;
+
+        // Helper functions
+        function showLoading(element) {
+            element.innerHTML = `
+                <div class="space-y-4">
+                    <div class="loading-skeleton h-8 w-48 rounded"></div>
+                    <div class="loading-skeleton h-4 w-32 rounded"></div>
+                    <div class="loading-skeleton h-4 w-24 rounded"></div>
+                </div>
+            `;
+        }
+
+        function showError(element, message) {
+            // Check if this is a setup-related message (not a real error)
+            const isSetupMessage = message.includes('not configured') || message.includes('setup');
+            
+            if (isSetupMessage) {
+                // Show welcoming setup state instead of error
+                element.innerHTML = `
+                    <div class="bg-[hsl(0_0%_8%)] border border-[hsl(0_0%_14.9%)] rounded-lg p-6 text-center">
+                        <div class="flex items-center justify-center w-12 h-12 mx-auto bg-[hsl(0_0%_12%)] rounded-full mb-4">
+                            <svg class="w-6 h-6 text-[hsl(0_0%_63.9%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-[hsl(0_0%_98%)] mb-2">Setup Required</h3>
+                        <p class="text-sm text-muted-foreground mb-4">${message}</p>
+                        <p class="text-xs text-muted-foreground">Configure your .env.prod file for production access</p>
+                    </div>
+                `;
+            } else {
+                // Show actual error state for real errors
+                element.innerHTML = `
+                    <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-6 text-center">
+                        <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-500/20 rounded-full mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-red-400 mb-2">Error Loading Data</h3>
+                        <p class="text-sm text-muted-foreground">${message}</p>
+                    </div>
+                `;
+            }
+            
+            // Set error state and disable buttons
+            prodErrorState = true;
+            document.getElementById('exportProdBtn').disabled = true;
+            // Also disable refresh button for production environment when in setup state
+            if (isSetupMessage) {
+                document.getElementById('refreshProdBtn').disabled = true;
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString();
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+
+        // Load data functions
+        async function loadProdData() {
+            const content = document.getElementById('prodContent');
+            showLoading(content);
+
+            try {
+                const response = await fetch('/api/signups?env=prod');
+                const data = await response.json();
+
+                if (data.error) {
+                    showError(content, data.error);
+                    return;
+                }
+
+                renderEnvironmentData(content, data);
+            } catch (error) {
+                console.error('Error loading prod data:', error);
+                showError(content, 'Failed to load production environment data. Please check your connection.');
+            }
+        }
+
+        function renderEnvironmentData(element, data) {
+            const { totalSignups, signups, stats } = data;
+
+            // Clear error state and enable/disable buttons based on data
+            prodErrorState = false;
+            document.getElementById('refreshProdBtn').disabled = false;
+            // Disable export if no data
+            document.getElementById('exportProdBtn').disabled = totalSignups === 0;
+
+            element.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-card border border-border rounded-lg p-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-muted-foreground">Total Signups</p>
+                                <p class="text-2xl font-bold">${formatNumber(totalSignups)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-card border border-border rounded-lg p-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-muted-foreground">Last 24 Hours</p>
+                                <p class="text-2xl font-bold">${formatNumber(stats.last24Hours)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-card border border-border rounded-lg p-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm text-muted-foreground">Last 7 Days</p>
+                                <p class="text-2xl font-bold">${formatNumber(stats.last7Days)}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card border border-border rounded-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-muted/50">
+                                <tr>
+                                    <th class="text-left p-4 font-medium">ID</th>
+                                    <th class="text-left p-4 font-medium">Email</th>
+                                    <th class="text-left p-4 font-medium">Signup Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${signups.map(signup => `
+                                    <tr class="border-t border-border hover:bg-muted/30 transition-colors">
+                                        <td class="p-4 text-sm">${signup.id}</td>
+                                        <td class="p-4 text-sm font-mono">${signup.email}</td>
+                                        <td class="p-4 text-sm text-muted-foreground">${formatDate(signup.created_at)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Export functions
+        function showExportModal() {
+            // Check if there's an error state
+            if (prodErrorState) {
+                showExportErrorModal('Cannot export data when there is an error loading data. Please refresh and try again.');
+                return;
+            }
+            
+            const modal = document.getElementById('exportModal');
+            modal.classList.add('show');
+        }
+
+        async function exportData(format) {
+            try {
+                const response = await fetch(`/api/signups/export?env=prod&format=${format}`);
+                
+                if (!response.ok) {
+                    throw new Error('Export failed');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `signups-prod-${new Date().toISOString().split('T')[0]}.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Export error:', error);
+                showExportErrorModal('Export failed. Please try again.');
+            }
+        }
+
+        function showExportErrorModal(error) {
+            const modal = document.getElementById('exportErrorModal');
+            const errorElement = document.getElementById('exportErrorMessage');
+            errorElement.textContent = error;
+            modal.classList.add('show');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial data
+            loadProdData();
+
+            // Refresh button
+            document.getElementById('refreshProdBtn').addEventListener('click', loadProdData);
+
+            // Export button
+            document.getElementById('exportProdBtn').addEventListener('click', showExportModal);
+
+            // Export format buttons
+            document.getElementById('exportCsvBtn').addEventListener('click', () => {
+                exportData('csv');
+                document.getElementById('exportModal').classList.remove('show');
+            });
+
+            document.getElementById('exportJsonBtn').addEventListener('click', () => {
+                exportData('json');
+                document.getElementById('exportModal').classList.remove('show');
+            });
+
+            // Modal close buttons
+            document.getElementById('closeExportModal').addEventListener('click', () => {
+                document.getElementById('exportModal').classList.remove('show');
+            });
+
+            document.getElementById('closeExportErrorModal').addEventListener('click', () => {
+                document.getElementById('exportErrorModal').classList.remove('show');
+            });
+
+            // Close modals when clicking outside
+            document.getElementById('exportModal').addEventListener('click', (e) => {
+                if (e.target.id === 'exportModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            document.getElementById('exportErrorModal').addEventListener('click', (e) => {
+                if (e.target.id === 'exportErrorModal') {
+                    e.target.classList.remove('show');
+                }
+            });
+
+            // Logo click handler
+            document.getElementById('logoLink').addEventListener('click', function() {
+                window.location.href = '/';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -30,37 +30,37 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     // Check if database is configured
     if (!pool) {
-      return res.status(503).json({ 
-        success: false, 
-        message: 'Database not configured. Please run "bun run setup" to configure your local database.' 
+      return res.status(503).json({
+        success: false,
+        message: 'Service temporarily unavailable. Please try again later.'
       });
     }
 
     try {
       // Apply security validation and rate limiting
       const validation = validateAndRateLimit(req, res);
-      
+
       if (!validation.valid) {
-        return res.status(validation.status).json({ 
-          success: false, 
-          message: validation.error 
+        return res.status(validation.status).json({
+          success: false,
+          message: validation.error
         });
       }
 
       const email = validation.email;
       const client = await pool.connect();
-      
+
       try {
         // Check if email already exists (additional protection)
         const existingCheck = await client.query(
           'SELECT id FROM waitlist_signups WHERE email = $1',
           [email]
         );
-        
+
         if (existingCheck.rows.length > 0) {
-          return res.status(400).json({ 
-            success: false, 
-            message: 'This email is already on the waitlist' 
+          return res.status(400).json({
+            success: false,
+            message: 'This email is already on the waitlist'
           });
         }
 
@@ -73,20 +73,22 @@ export default async function handler(req, res) {
         // Get total count
         const countResult = await client.query('SELECT COUNT(*) FROM waitlist_signups');
         const count = parseInt(countResult.rows[0].count);
-        
-        // Log successful signup for monitoring
-        console.log(`✅ Successful signup: ${email} (Total: ${count})`);
-        
-        res.status(200).json({ 
-          success: true, 
+
+        // Log successful signup for monitoring (sanitized email)
+        const sanitizedEmail = email ? `${email.substring(0, 3)}***@***` : 'unknown';
+        console.log(`✅ Successful signup: ${sanitizedEmail} (Total: ${count})`);
+
+        res.status(200).json({
+          success: true,
           message: "Thanks for joining the waitlist!\nWe'll notify you when StealthList is ready.",
-          count 
+          count
         });
       } finally {
         client.release();
       }
-    } catch (error) {
-      console.error('❌ Waitlist error:', error);
+        } catch (error) {
+      // Log error without exposing sensitive details
+      console.error('❌ Waitlist error:', error.message || 'Unknown error');
       
       // Don't expose internal errors to potential attackers
       res.status(500).json({ 
@@ -96,9 +98,9 @@ export default async function handler(req, res) {
     }
   } else {
     res.setHeader('Allow', ['POST']);
-    res.status(405).json({ 
-      success: false, 
-      message: `Method ${req.method} Not Allowed` 
+    res.status(405).json({
+      success: false,
+      message: `Method ${req.method} Not Allowed`
     });
   }
 } 
