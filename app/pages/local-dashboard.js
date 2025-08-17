@@ -3,12 +3,12 @@ import EnvironmentSection from '../components/EnvironmentSection';
 
 export default function LocalDashboard() {
   return (
-    <Layout 
+    <Layout
       title="Local Dashboard - StealthList"
       description="View and manage local waitlist signups for StealthList."
       currentPage="local-dashboard"
     >
-      <EnvironmentSection 
+      <EnvironmentSection
         environment="local"
         title="Local Environment"
         showAddUserButton={true}

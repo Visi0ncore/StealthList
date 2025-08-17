@@ -31,14 +31,13 @@ export default async function handler(req, res) {
     if (!pool) {
       return res.status(200).json({
         count: 0,
-        latestSignups: 0,
-        message: 'Database not configured. Run "bun run setup" to get started.'
+        latestSignups: 0
       });
     }
 
     try {
       const client = await pool.connect();
-      
+
       try {
         // Get total count of all signups
         const countResult = await client.query('SELECT COUNT(*) FROM waitlist_signups');
@@ -59,7 +58,7 @@ export default async function handler(req, res) {
       }
     } catch (error) {
       console.error('Stats error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Failed to fetch stats',
         count: 0,
         latestSignups: 0
@@ -67,8 +66,8 @@ export default async function handler(req, res) {
     }
   } else {
     res.setHeader('Allow', ['GET']);
-    res.status(405).json({ 
-      error: `Method ${req.method} Not Allowed` 
+    res.status(405).json({
+      error: `Method ${req.method} Not Allowed`
     });
   }
 } 

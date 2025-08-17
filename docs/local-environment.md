@@ -56,8 +56,6 @@ If PostgreSQL connection fails:
 - Ensure PostgreSQL is running: `brew services start postgresql@15`
 - Test connection: `psql postgres -c 'SELECT 1;'`
 
----
-
 ## 🗑️ Destroying Your Environment
 
 The destroy script completely removes your local setup and all associated data.
@@ -96,8 +94,6 @@ Use the destroy script when you want to:
 - Remove all local data
 - Troubleshoot persistent issues
 - Reset to initial state
-
----
 
 ## Quick Reference
 

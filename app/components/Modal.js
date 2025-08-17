@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-export default function Modal({ 
-  isOpen, 
-  onClose, 
-  children, 
-  title, 
-  description 
+export default function Modal({
+  isOpen,
+  onClose,
+  children,
+  title,
+  description
 }) {
   useEffect(() => {
     const handleEscape = (e) => {
@@ -28,11 +28,11 @@ export default function Modal({
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity"
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-card border border-border rounded-lg p-6 max-w-md w-full mx-4 transform transition-transform"
         onClick={(e) => e.stopPropagation()}
       >

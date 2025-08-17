@@ -45,7 +45,6 @@ bun run start        # Start production server
 ### Setup & Configuration
 ```bash
 bun run setup        # Complete automated setup
-bun run validate     # Validate setup completion
 bun run destroy      # Completely destroy setup (for fresh start)
 ```
 
@@ -60,8 +59,8 @@ bun run db:reset     # Reset database (delete all data)
 
 ### Production Scripts
 ```bash
-./scripts/waitlist-stats.sh    # View production statistics
-./scripts/waitlist-recent.sh   # View recent production signups
+./scripts/waitlist-stats.sh    # View production statistics (requires .env.prod)
+./scripts/waitlist-recent.sh   # View recent production signups (requires .env.prod)
 ```
 
 ## 🌐 API Endpoints

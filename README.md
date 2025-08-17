@@ -49,7 +49,6 @@ Visit [http://localhost:3000](http://localhost:3000)
 ### Additional Commands
 
 ```bash
-bun run validate     # Validate setup
 bun run destroy      # Destroy setup (fresh start)
 ```
 

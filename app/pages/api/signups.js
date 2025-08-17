@@ -2,6 +2,7 @@ const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
 const { configureCORS } = require('../../lib/cors');
+const { showWarningOnce } = require('../../lib/warnings');
 
 // Local database connection using POSTGRES_URL from .env.local (same as existing setup)
 let localPool = null;
@@ -13,21 +14,21 @@ if (process.env.POSTGRES_URL && process.env.POSTGRES_URL.trim() !== '') {
   } catch (error) {
     console.warn('⚠️  Local database configuration error:', error.message);
   }
-} else {
-  console.log('⚠️  No local database configuration found. Run "bun run setup" to configure your local database.');
-}
+  } else {
+    showWarningOnce('local-db-config', '⚠️  No local database configuration found. Run "bun run setup" to configure your local database.');
+  }
 
 // Function to load production database URL from .env.prod
 function loadProdDatabaseUrl() {
   try {
     const envProdPath = path.join(process.cwd(), '.env.prod');
-    
+
     // Check if file exists before trying to read it
     if (!fs.existsSync(envProdPath)) {
-      console.log('⚠️  No .env.prod file found. Production database will not be available.');
+      showWarningOnce('prod-env-file', '⚠️  No .env.prod file found. Production database will not be available.');
       return null;
     }
-    
+
     const envProdContent = fs.readFileSync(envProdPath, 'utf8');
     const postgresUrlMatch = envProdContent.match(/POSTGRES_URL="([^"]+)"/);
     if (postgresUrlMatch) {
@@ -81,7 +82,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const client = await pool.connect();
-      
+
       try {
         // Get total count
         const countResult = await client.query('SELECT COUNT(*) FROM waitlist_signups');
@@ -136,7 +137,7 @@ export default async function handler(req, res) {
 
     try {
       const client = await localPool.connect();
-      
+
       try {
         // Get count before deletion
         const beforeCount = await client.query('SELECT COUNT(*) FROM waitlist_signups');

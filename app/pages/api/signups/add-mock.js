@@ -1,30 +1,31 @@
 import { Pool } from 'pg';
+import { showWarningOnce } from '../../lib/warnings.js';
 
 // Local database connection using POSTGRES_URL from .env.local (same as existing setup)
 let localPool = null;
 if (process.env.POSTGRES_URL && process.env.POSTGRES_URL.trim() !== '') {
-  try {
-    localPool = new Pool({
-      connectionString: process.env.POSTGRES_URL,
-    });
-  } catch (error) {
-    console.warn('⚠️  Local database configuration error:', error.message);
-  }
-} else {
-  console.log('⚠️  No local database configuration found. Run "bun run setup" to configure your local database.');
-}
+    try {
+        localPool = new Pool({
+            connectionString: process.env.POSTGRES_URL,
+        });
+    } catch (error) {
+        console.warn('⚠️  Local database configuration error:', error.message);
+    }
+    } else {
+        showWarningOnce('local-db-config', '⚠️  No local database configuration found. Run "bun run setup" to configure your local database.');
+    }
 
 // Mock user data generator
 function generateMockUser() {
     const domains = ['gmail.com', 'outlook.com', 'yahoo.com', 'icloud.com', 'hotmail.com'];
     const firstNames = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Henry', 'Ivy', 'Jack'];
     const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
-    
+
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
     const domain = domains[Math.floor(Math.random() * domains.length)];
     const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}@${domain}`;
-    
+
     return email;
 }
 
@@ -56,7 +57,7 @@ export default async function handler(req, res) {
 
     try {
         const { count = 1 } = req.body;
-        
+
         // Validate count
         const numCount = parseInt(count);
         if (isNaN(numCount) || numCount < 1 || numCount > 100) {
@@ -76,9 +77,9 @@ export default async function handler(req, res) {
         // Insert users into database
         const values = mockUsers.map((email, index) => `($${index + 1})`).join(', ');
         const query = `INSERT INTO waitlist_signups (email) VALUES ${values} RETURNING id, email, created_at`;
-        
+
         const result = await localPool.query(query, mockUsers);
-        
+
         res.status(200).json({
             success: true,
             message: `Successfully added ${numCount} mock user${numCount === 1 ? '' : 's'}`,
