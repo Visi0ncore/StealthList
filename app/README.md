@@ -1,35 +1,16 @@
 # 🥷 StealthList Application
 
-> ⚠️ **WORK IN PROGRESS** ⚠️  
-> This README.md is currently being updated and may contain incomplete information.
-
 This directory contains the main StealthList application - a secure, production-ready waitlist management system built with Next.js and PostgreSQL.
 
 ## ✨ Features
 
 - 📝 **Waitlist Management**: PostgreSQL database for email signups
-- 🛡️ **Basic Security**: Rate limiting and input validation
+- 🛡️ **Security**: Rate limiting, input validation, and SQL injection protection
 - 📊 **Real-time Stats**: Live counter updates via API
-- 🎨 **Clean UI**: Static HTML pages with Tailwind CSS
-- 🔧 **Easy Setup**: Automated installation and configuration
-- 📱 **Responsive Design**: Works on desktop and mobile
-
-## 🔒 Security Features
-
-**Rate Limiting:**
-- 5 signups per IP per hour
-- 3 requests per minute per IP
-- 24-hour cooldown per email address
-
-**Input Validation:**
-- Email format validation
-- 254 character limit
-- SQL injection protection via parameterized queries
-
-**Basic Monitoring:**
-- Logs successful signups
-- Tracks failed attempts
-- Automatic cleanup of old rate limit data
+- 🎨 **Custom UI**: Professional interface with custom error handling
+- 🔧 **Easy Setup**: One-command automated installation and configuration
+- 📱 **Responsive Design**: Works perfectly on desktop and mobile
+- 🔄 **Modular Architecture**: Reusable components and clean separation of concerns
 
 
 
@@ -57,11 +38,11 @@ bun run db:recent    # View recent signups (last 24h)
 bun run db:reset     # Reset database (delete all data)
 ```
 
-### Production Scripts
+<!-- ### Production Scripts
 ```bash
 ./scripts/waitlist-stats.sh    # View production statistics (requires .env.prod)
 ./scripts/waitlist-recent.sh   # View recent production signups (requires .env.prod)
-```
+``` -->
 
 ## 🌐 API Endpoints
 
@@ -74,7 +55,7 @@ bun run db:reset     # Reset database (delete all data)
 - `DELETE /api/signups?env=local` - Delete all local signups
 - `GET /api/signups/export?env=local|prod&format=csv|json` - Export signup data
 
-## 🛡️ Security Implementation
+## 🔒 Security Features
 
 ### Rate Limiting
 - 5 signups per IP per hour
@@ -82,72 +63,76 @@ bun run db:reset     # Reset database (delete all data)
 - 24-hour cooldown per email address
 
 ### Input Validation
-- Email format validation
+- Email format validation with custom error handling
 - 254 character maximum length
 - Parameterized queries to prevent SQL injection
+- Custom validation (no browser popups)
 
-### Monitoring
-- Logs successful signups
+### Monitoring & Protection
+- Logs successful signups with IP tracking
 - Tracks failed attempts with IP addresses
 - Automatic cleanup of old rate limit data
+- One-time warning system for cleaner logs
+- CORS configuration for secure cross-origin requests
+
+## 📚 Documentation
+
+For more detailed information, see:
+- **[Application Structure](../docs/application-structure.md)** - Architecture overview and page navigation
+- **[Local Environment](../docs/local-environment.md)** - Local development setup and management  
+- **[Production Deployment](../docs/prod-environment.md)** - Deploy to Vercel and other platforms
 
 ## 📁 Project Structure
 
 ```
-stealthlist/
-├── lib/
-│   └── security.js          # Security middleware and validation
-├── pages/
-│   └── api/
-│       ├── waitlist.js      # Waitlist signup endpoint
-│       ├── waitlist/
-│       │   └── stats.js     # Waitlist statistics
-│       ├── signups.js       # Signup management
-│       └── signups/
-│           └── export.js    # Data export functionality
-├── public/
-│   ├── index.html          # Main landing page
-│   └── signups.html        # Signup dashboard
-├── scripts/
-│   ├── setup.sh            # Interactive setup script
+app/
+├── components/              # Reusable React components
+│   ├── Layout.js           # Main layout with header
+│   ├── Button.js           # Reusable button component
+│   ├── Modal.js            # Modal dialog component
+│   ├── StatsCard.js        # Statistics display card
+│   ├── SignupsTable.js     # Signup data table
+│   └── EnvironmentSection.js # Complete environment dashboard
+├── lib/                    # Utility libraries
+│   ├── security.js         # Rate limiting and validation
+│   ├── cors.js             # CORS configuration
+│   └── warnings.js         # One-time warning system
+├── pages/                  # Next.js pages
+│   ├── index.js            # Main waitlist page (/)
+│   ├── dashboard.js        # Production dashboard (/dashboard)
+│   ├── local-dashboard.js  # Local dashboard (/local-dashboard)
+│   └── _app.js             # App wrapper
+├── scripts/                # Automation scripts
+│   ├── setup.sh            # Complete setup script
+│   ├── destroy.sh          # Environment cleanup
+│   ├── db-connect.sh       # Database connection
+│   ├── db-reset.sh         # Database reset
 │   ├── waitlist-stats.sh   # Production statistics
 │   └── waitlist-recent.sh  # Recent signups
-├── db-connect.sh           # Database connection
-├── db-reset.sh             # Database reset
-├── package.json            # Dependencies and scripts
-└── next.config.js          # Next.js configuration
+├── styles/                 # Global styles
+│   └── globals.css         # Tailwind + custom styles
+└── public/                 # Static assets
+    ├── index.html          # Original static page (reference)
+    └── signups.html        # Original dashboard (reference)
 ```
 
-## 🚀 Deployment
+<!-- ## 🚀 Deployment
 
-### Vercel Deployment
-
-1. **Connect Repository**: Link your GitHub repository to Vercel
-2. **Environment Variables**: Set `POSTGRES_URL` in Vercel dashboard
-3. **Build Command**: `bun run build`
-4. **Output Directory**: `.next`
-5. **Install Command**: `bun install`
-
-### Production Database
-
-For production, use a managed PostgreSQL service:
-- **Vercel Postgres**: Native integration
-- **Supabase**: Open source alternative
-- **Neon**: Serverless PostgreSQL
-- **Railway**: Simple deployment
+For detailed deployment instructions, see **[Production Deployment](../docs/prod-environment.md)**. -->
 
 ## 📈 Analytics & Monitoring
 
 ### Built-in Features
 - Real-time signup counter on landing page
-- Signup management dashboard
+- Signup management dashboard with separate local/production views
 - CSV and JSON export options
 - Local and production data separation
 
 ### Basic Monitoring
 - Logs successful signups
-- Tracks failed attempts
+- Tracks failed attempts with IP addresses
 - Monitors rate limit usage
+- One-time warning system for cleaner logs
 
 
 
@@ -156,4 +141,4 @@ For production, use a managed PostgreSQL service:
 - **Documentation**: Check this README and inline comments
 - **Issues**: Report bugs and feature requests on GitHub
 - **Security**: Report security vulnerabilities privately
-- **Community**: Join discussions in GitHub Discussions
+- **Community**: [Contact me on X](https://x.com/stealthlist)

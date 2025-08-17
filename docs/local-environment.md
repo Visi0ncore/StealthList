@@ -10,8 +10,8 @@ The setup script automates the entire process of creating a local development en
 
 Before running the setup, ensure you have:
 
-- **Bun** - JavaScript runtime and package manager
-- **PostgreSQL** - Database server
+- **[Bun](https://bun.sh/)** - JavaScript runtime and package manager
+- **[PostgreSQL](https://www.postgresql.org/)** - Database server
 
 ### Installation Commands
 
@@ -31,7 +31,7 @@ brew services start postgresql@15
 1. Navigate to the StealthList app directory
 2. Run the setup script:
    ```bash
-   ./scripts/setup.sh
+   bun run setup
    ```
 
 ### What the Setup Does
@@ -65,7 +65,7 @@ The destroy script completely removes your local setup and all associated data.
 1. Navigate to the StealthList app directory
 2. Run the destroy script:
    ```bash
-   ./scripts/destroy.sh
+   bun run destroy
    ```
 3. Type `DESTROY` when prompted to confirm
 
@@ -99,7 +99,7 @@ Use the destroy script when you want to:
 
 | Action | Command | Description |
 |--------|---------|-------------|
-| Setup | `./scripts/setup.sh` | Create complete local environment |
-| Destroy | `./scripts/destroy.sh` | Remove all local setup and data |
+| Setup | `bun run setup` | Create complete local environment |
+| Destroy | `bun run destroy` | Remove all local setup and data |
 | Start Dev | `bun run dev` | Launch development server |
 | Stop Dev | `Ctrl+C` | Stop development server |

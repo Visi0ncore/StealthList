@@ -1,34 +1,25 @@
 # 🥷 StealthList
 
-StealthList is a Next.js application that provides waitlist management with a PostgreSQL backend.
+An open-source waitlist management platform built with Next.js and PostgreSQL. Collect emails, track signups, and manage your waitlist with a clean, easy-to-use interface.
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
-## 🏗️ Architecture
-
-StealthList is built as a modern web application with the following architecture:
-
-- **Frontend**: Next.js with static HTML pages and Tailwind CSS
-- **Backend**: Next.js API routes with PostgreSQL database
-- **Security**: Basic protection including rate limiting and input validation
-- **Database**: PostgreSQL with secure connection management
-- **Deployment**: Optimized for Vercel with support for other platforms
-
 ## ✨ Key Features
 
-- 🔒 **Basic Security**: Rate limiting and input validation
-- 📊 **Real-time Stats**: Live signup counters and dashboard
-- 🛡️ **Simple Protection**: Basic rate limiting and email validation
-- 📈 **Easy Setup**: Automated installation and configuration
-- 🔧 **Developer Friendly**: CLI tools and documentation
+- 🔒 **Security**: Rate limiting, input validation, and SQL injection protection
+- 📊 **Real-time Stats**: Live signup counters and comprehensive dashboard
+- 🎨 **Custom UI**: Professional interface with custom error handling
+- 📈 **Easy Setup**: One-command automated installation and configuration
+- 🔧 **Developer Friendly**: CLI tools, modular components, and comprehensive docs
+- 📱 **Responsive**: Works perfectly on desktop and mobile devices
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Bun
-- PostgreSQL
+- [Bun](https://bun.sh/)
+- [PostgreSQL](https://www.postgresql.org/)
 
 ### Setup & Run
 
@@ -54,7 +45,10 @@ bun run destroy      # Destroy setup (fresh start)
 
 ## 📚 Documentation
 
-For detailed documentation, setup instructions, API reference, and development guides, see the [app README](./app/README.md).
+- **[Application Guide](./app/README.md)** - Detailed setup, API reference, and development guides
+- **[Application Structure](./docs/application-structure.md)** - Architecture overview and page navigation
+- **[Local Environment](./docs/local-environment.md)** - Local development setup and management
+<!-- - **[Production Deployment](./docs/prod-environment.md)** - Deploy to Vercel and other platforms -->
 
 ## 🤝 Contributing
 
