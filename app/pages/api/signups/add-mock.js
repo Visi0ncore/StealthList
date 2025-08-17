@@ -88,10 +88,11 @@ export default async function handler(req, res) {
         });
 
     } catch (error) {
-        console.error('Error adding mock users:', error);
+        // Log error without exposing sensitive details
+        console.error('Error adding mock users:', error.message || 'Unknown error');
         res.status(500).json({
             error: 'Failed to add mock users',
-            message: error.message
+            message: 'Please try again later'
         });
     }
 } 

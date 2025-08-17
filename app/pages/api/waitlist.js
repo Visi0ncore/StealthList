@@ -74,8 +74,9 @@ export default async function handler(req, res) {
         const countResult = await client.query('SELECT COUNT(*) FROM waitlist_signups');
         const count = parseInt(countResult.rows[0].count);
 
-        // Log successful signup for monitoring
-        console.log(`✅ Successful signup: ${email} (Total: ${count})`);
+        // Log successful signup for monitoring (sanitized email)
+        const sanitizedEmail = email ? `${email.substring(0, 3)}***@***` : 'unknown';
+        console.log(`✅ Successful signup: ${sanitizedEmail} (Total: ${count})`);
 
         res.status(200).json({
           success: true,
@@ -85,13 +86,14 @@ export default async function handler(req, res) {
       } finally {
         client.release();
       }
-    } catch (error) {
-      console.error('❌ Waitlist error:', error);
-
+        } catch (error) {
+      // Log error without exposing sensitive details
+      console.error('❌ Waitlist error:', error.message || 'Unknown error');
+      
       // Don't expose internal errors to potential attackers
-      res.status(500).json({
-        success: false,
-        message: "Something went wrong. Please try again later."
+      res.status(500).json({ 
+        success: false, 
+        message: "Something went wrong. Please try again later." 
       });
     }
   } else {

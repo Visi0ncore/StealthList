@@ -56,9 +56,10 @@ export default async function handler(req, res) {
       } finally {
         client.release();
       }
-    } catch (error) {
-      console.error('Stats error:', error);
-      res.status(500).json({
+        } catch (error) {
+      // Log error without exposing sensitive details
+      console.error('Stats error:', error.message || 'Unknown error');
+      res.status(500).json({ 
         error: 'Failed to fetch stats',
         count: 0,
         latestSignups: 0

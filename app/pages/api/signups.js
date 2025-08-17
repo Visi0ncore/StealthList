@@ -116,7 +116,8 @@ export default async function handler(req, res) {
         client.release();
       }
     } catch (error) {
-      console.error(`Error fetching ${env} signups:`, error);
+      // Log error without exposing sensitive details
+      console.error(`Error fetching ${env} signups:`, error.message || 'Unknown error');
       res.status(500).json({
         error: `Failed to fetch ${env} signup data`
       });
@@ -126,6 +127,13 @@ export default async function handler(req, res) {
     if (env !== 'local') {
       return res.status(403).json({
         error: 'Deletion is only allowed for local environment'
+      });
+    }
+
+    // Additional security check: ensure we're in development mode
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(403).json({
+        error: 'Deletion is not allowed in production environment'
       });
     }
 
@@ -146,7 +154,7 @@ export default async function handler(req, res) {
         // Delete all signups
         await client.query('DELETE FROM waitlist_signups');
 
-        console.log(`🗑️ Deleted ${deletedCount} local signup records`);
+        console.log(`🗑️ Deleted ${deletedCount} local signup records (env: ${env})`);
 
         res.status(200).json({
           success: true,
@@ -157,7 +165,8 @@ export default async function handler(req, res) {
         client.release();
       }
     } catch (error) {
-      console.error('Error deleting local signups:', error);
+      // Log error without exposing sensitive details
+      console.error('Error deleting local signups:', error.message || 'Unknown error');
       res.status(500).json({
         error: 'Failed to delete local signup data'
       });

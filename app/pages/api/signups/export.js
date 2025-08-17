@@ -129,7 +129,8 @@ export default async function handler(req, res) {
       client.release();
     }
   } catch (error) {
-    console.error(`Error exporting ${env} signups:`, error);
+    // Log error without exposing sensitive details
+    console.error(`Error exporting ${env} signups:`, error.message || 'Unknown error');
     res.status(500).json({
       error: `Failed to export ${env} signup data`
     });

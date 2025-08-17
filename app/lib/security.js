@@ -112,8 +112,9 @@ function recordAttempt(ip, email) {
 function securityMiddleware(req, res, next) {
   const ip = getClientIP(req);
 
-  // Log attempt for monitoring
-  console.log(`Waitlist attempt from IP: ${ip} at ${new Date().toISOString()}`);
+  // Log attempt for monitoring (sanitized IP)
+  const sanitizedIP = ip ? `${ip.substring(0, 8)}***` : 'unknown';
+  console.log(`Waitlist attempt from IP: ${sanitizedIP} at ${new Date().toISOString()}`);
 
   // Add security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
