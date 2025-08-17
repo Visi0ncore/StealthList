@@ -6,6 +6,7 @@ export default function LocalDashboard() {
     <Layout 
       title="Local Dashboard - StealthList"
       description="View and manage local waitlist signups for StealthList."
+      currentPage="local-dashboard"
     >
       <EnvironmentSection 
         environment="local"

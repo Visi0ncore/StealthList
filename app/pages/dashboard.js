@@ -6,6 +6,7 @@ export default function Dashboard() {
     <Layout 
       title="Production Dashboard - StealthList"
       description="View and manage production waitlist signups for StealthList."
+      currentPage="dashboard"
     >
       <EnvironmentSection 
         environment="prod"
