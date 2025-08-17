@@ -7,103 +7,31 @@ This directory contains the main StealthList application - a secure, production-
 
 ## ✨ Features
 
-- ✅ **Secure Waiting List**: PostgreSQL database with direct pg client
-- ✅ **Multi-Layer Security**: Rate limiting, IP blocking, and abuse prevention
-- ✅ **Email Validation**: Enhanced client and server-side validation
-- ✅ **Database Management**: Secure command-line tools with no password exposure
-- ✅ **Static HTML Frontend**: Fast, reliable UI with Tailwind CSS styling
-- ✅ **Real-time Statistics**: Live counter updates via API
-- ✅ **Production Ready**: Comprehensive error handling and monitoring
+- 📝 **Waitlist Management**: PostgreSQL database for email signups
+- 🛡️ **Basic Security**: Rate limiting and input validation
+- 📊 **Real-time Stats**: Live counter updates via API
+- 🎨 **Clean UI**: Static HTML pages with Tailwind CSS
+- 🔧 **Easy Setup**: Automated installation and configuration
+- 📱 **Responsive Design**: Works on desktop and mobile
 
 ## 🔒 Security Features
 
-🛡️ **Backend Protection:**
-- **Rate Limiting**: Max 5 signups per IP per hour
-- **Burst Protection**: Max 3 requests per minute per IP
-- **IP Blocking**: 1-hour automatic blocks for abusers
-- **Email Deduplication**: 24-hour cooldown per email address
-- **Input Sanitization**: Email cleaning and validation
-- **SQL Injection Protection**: Parameterized queries only
-- **Security Headers**: XSS, CSRF, and clickjacking protection
+**Rate Limiting:**
+- 5 signups per IP per hour
+- 3 requests per minute per IP
+- 24-hour cooldown per email address
 
-🪖 **Frontend Protection:**
-- **5-second cooldown** between form submissions
-- **Enhanced email validation** (254 character limit, proper regex)
-- **User-friendly error messages** with visual feedback
-- **Network error handling** with retry guidance
+**Input Validation:**
+- Email format validation
+- 254 character limit
+- SQL injection protection via parameterized queries
 
-⛑️ **Monitoring & Logging:**
-- **Successful signups logged** with email and count
-- **Failed attempts logged** with IP addresses and timestamps
-- **Automatic cleanup** of old rate limit data
-- **Attack pattern detection** and blocking
+**Basic Monitoring:**
+- Logs successful signups
+- Tracks failed attempts
+- Automatic cleanup of old rate limit data
 
-## 🚀 Quick Start
 
-### 1. Install Dependencies
-
-```bash
-bun install
-```
-
-### 2. Set Up Database
-
-**Local PostgreSQL Setup:**
-
-```bash
-# Install PostgreSQL locally
-# Create database and user with secure credentials
-psql -U postgres -c "CREATE DATABASE stealthlist_waitlist;"
-psql -U postgres -c "CREATE USER stealthlist_user WITH ENCRYPTED PASSWORD 'your_secure_password';"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE stealthlist_waitlist TO stealthlist_user;"
-```
-
-**Create the waitlist table:**
-
-```sql
-CREATE TABLE waitlist_signups (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### 3. Configure Environment
-
-Set up your local database configuration:
-
-```bash
-bun run setup
-```
-
-**Generate a secure password:**
-```bash
-openssl rand -base64 32
-```
-
-**Update .env.local with your credentials:**
-```bash
-POSTGRES_URL="postgresql://your_username:your_password@localhost:5432/your_database"
-POSTGRES_PRISMA_URL="postgresql://your_username:your_password@localhost:5432/your_database?pgbouncer=true&connect_timeout=15"
-POSTGRES_URL_NON_POOLING="postgresql://your_username:your_password@localhost:5432/your_database"
-```
-
-**Database Setup Tips:**
-- Create a PostgreSQL database for your waitlist
-- Use a dedicated user with appropriate permissions
-- Ensure the database is accessible from localhost:5432
-
-### 4. Set Up Secure Database Access
-
-The system automatically creates a secure `.pgpass` file for password-free database access.
-
-### 5. Start Development Server
-
-```bash
-bun run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000)
 
 ## 📊 Available Scripts
 
@@ -112,6 +40,13 @@ Visit [http://localhost:3000](http://localhost:3000)
 bun run dev          # Start development server
 bun run build        # Build for production
 bun run start        # Start production server
+```
+
+### Setup & Configuration
+```bash
+bun run setup        # Complete automated setup
+bun run validate     # Validate setup completion
+bun run destroy      # Completely destroy setup (for fresh start)
 ```
 
 ### Database Management
@@ -143,22 +78,19 @@ bun run db:reset     # Reset database (delete all data)
 ## 🛡️ Security Implementation
 
 ### Rate Limiting
-- **Per IP**: 5 signups per hour
-- **Burst Protection**: 3 requests per minute
-- **Email Cooldown**: 24-hour cooldown per email
-- **IP Blocking**: 1-hour automatic blocks for abuse
+- 5 signups per IP per hour
+- 3 requests per minute per IP
+- 24-hour cooldown per email address
 
 ### Input Validation
-- **Email Format**: RFC-compliant email validation
-- **Length Limits**: 254 character maximum
-- **Sanitization**: Email cleaning and normalization
-- **SQL Injection**: Parameterized queries only
+- Email format validation
+- 254 character maximum length
+- Parameterized queries to prevent SQL injection
 
 ### Monitoring
-- **Success Logging**: All successful signups logged
-- **Error Tracking**: Failed attempts with IP addresses
-- **Cleanup**: Automatic cleanup of old rate limit data
-- **Pattern Detection**: Attack pattern recognition
+- Logs successful signups
+- Tracks failed attempts with IP addresses
+- Automatic cleanup of old rate limit data
 
 ## 📁 Project Structure
 
@@ -187,27 +119,6 @@ stealthlist/
 └── next.config.js          # Next.js configuration
 ```
 
-## 🔧 Configuration
-
-### Environment Variables
-
-**Required:**
-- `POSTGRES_URL` - PostgreSQL connection string
-
-**Optional:**
-- `POSTGRES_PRISMA_URL` - Prisma-compatible connection string
-- `POSTGRES_URL_NON_POOLING` - Non-pooling connection string
-
-### Database Schema
-
-```sql
-CREATE TABLE waitlist_signups (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
 ## 🚀 Deployment
 
 ### Vercel Deployment
@@ -228,35 +139,18 @@ For production, use a managed PostgreSQL service:
 
 ## 📈 Analytics & Monitoring
 
-### Built-in Analytics
-- **Real-time Counter**: Live signup count on landing page
-- **Dashboard**: Comprehensive signup management interface
-- **Export Capabilities**: CSV and JSON export options
-- **Environment Separation**: Local and production data isolation
+### Built-in Features
+- Real-time signup counter on landing page
+- Signup management dashboard
+- CSV and JSON export options
+- Local and production data separation
 
-### Monitoring Features
-- **Success Tracking**: All successful signups logged
-- **Error Monitoring**: Failed attempts with detailed logging
-- **Rate Limit Tracking**: IP-based abuse prevention
-- **Performance Metrics**: Response time and throughput
+### Basic Monitoring
+- Logs successful signups
+- Tracks failed attempts
+- Monitors rate limit usage
 
-## 🔒 Security Best Practices
 
-### Implemented Protections
-- ✅ **Rate Limiting**: Prevents abuse and spam
-- ✅ **Input Validation**: Server-side email validation
-- ✅ **SQL Injection**: Parameterized queries
-- ✅ **XSS Protection**: Security headers and sanitization
-- ✅ **CSRF Protection**: Same-origin policy enforcement
-- ✅ **Clickjacking**: X-Frame-Options header
-- ✅ **Content Sniffing**: X-Content-Type-Options header
-
-### Recommended Additional Measures
-- **HTTPS Only**: Force HTTPS in production
-- **CORS Configuration**: Restrict cross-origin requests
-- **API Key Protection**: Add authentication for admin endpoints
-- **Log Monitoring**: Set up alerts for suspicious activity
-- **Backup Strategy**: Regular database backups
 
 ## 🆘 Support
 

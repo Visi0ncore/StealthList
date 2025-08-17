@@ -4,7 +4,6 @@ StealthList is a Next.js application that provides waitlist management with a Po
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue)
-![Security](https://img.shields.io/badge/Security-Multi--Layer-green)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
 ## 🏗️ Architecture
@@ -13,54 +12,46 @@ StealthList is built as a modern web application with the following architecture
 
 - **Frontend**: Next.js with static HTML pages and Tailwind CSS
 - **Backend**: Next.js API routes with PostgreSQL database
-- **Security**: Multi-layer protection including rate limiting, IP blocking, and input validation
+- **Security**: Basic protection including rate limiting and input validation
 - **Database**: PostgreSQL with secure connection management
 - **Deployment**: Optimized for Vercel with support for other platforms
 
 ## ✨ Key Features
 
-- 🔒 **Multi-Layer Security**: Rate limiting, IP blocking, email deduplication
-- 📊 **Real-time Analytics**: Live signup counters and comprehensive dashboards
-- 🛡️ **Abuse Prevention**: Automatic detection and blocking of malicious activity
-- 📈 **Production Ready**: Comprehensive error handling and monitoring
-- 🔧 **Developer Friendly**: Secure CLI tools and comprehensive documentation
+- 🔒 **Basic Security**: Rate limiting and input validation
+- 📊 **Real-time Stats**: Live signup counters and dashboard
+- 🛡️ **Simple Protection**: Basic rate limiting and email validation
+- 📈 **Easy Setup**: Automated installation and configuration
+- 🔧 **Developer Friendly**: CLI tools and documentation
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ or Bun
-- PostgreSQL 13+
-- Git
+- Bun
+- PostgreSQL
 
-### Installation
+### Setup & Run
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/StealthList.git
-   cd StealthList
-   ```
+```bash
+cd app
+bun run setup
+```
 
-2. **Navigate to the app directory**
-   ```bash
-   cd app
-   ```
+This single command will:
+- 📦 Install all dependencies
+- 🔌 Create database and user with secure credentials
+- 🪄 Generate environment files
+- 🧪 Test the complete setup
+- 🚀 Start the development server
 
-3. **Install dependencies**
-   ```bash
-   bun install
-   ```
+Visit [http://localhost:3000](http://localhost:3000)
 
-4. **Set up the database and environment**
-   ```bash
-   bun run setup
-   ```
+### Additional Commands
 
-5. **Start the development server**
-   ```bash
-   bun run dev
-   ```
-
-Visit [http://localhost:3000](http://localhost:3000) to see your waitlist in action.
+```bash
+bun run validate     # Validate setup
+bun run destroy      # Destroy setup (fresh start)
+```
 
 ## 📚 Documentation
 

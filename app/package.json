@@ -8,11 +8,11 @@
     "zod": "^3.22.0"
   },
   "private": true,
-  "scripts": {
-    "dev": "bun run next dev",
-    "build": "next build",
-    "start": "next start",
-    "setup": "./scripts/setup.sh",
+      "scripts": {
+        "dev": "bun run next dev",
+        "build": "next build",
+        "start": "next start",
+        "setup": "./scripts/setup.sh",
     "test": "./scripts/test-suite.sh",
     "test:unconfigured": "./scripts/test-unconfigured.sh",
     "test:cleanup": "./scripts/cleanup-test-data.sh reset",
@@ -21,6 +21,8 @@
     "db:stats": "./scripts/db-connect.sh \"SELECT COUNT(*) as total_signups FROM waitlist_signups;\"",
     "db:list": "./scripts/db-connect.sh \"SELECT * FROM waitlist_signups ORDER BY created_at DESC;\"",
     "db:recent": "./scripts/db-connect.sh \"SELECT * FROM waitlist_signups WHERE created_at >= NOW() - INTERVAL '24 hours' ORDER BY created_at DESC;\"",
-    "db:reset": "./scripts/db-reset.sh"
+    "db:reset": "./scripts/db-reset.sh",
+    "validate": "./scripts/validate-setup.sh",
+    "destroy": "./scripts/destroy.sh"
   }
 } 
